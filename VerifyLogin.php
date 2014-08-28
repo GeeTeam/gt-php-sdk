@@ -5,10 +5,11 @@
  */
 require_once ('lib/geetestlib.php');
 
-$PRIVATE_KEY = "0f1a37e33c9ed10dd2e133fe2ae9c459"; // TODO 在此处输入您的验证码私钥
+// TODO 在此处输入您的验证码私钥
+$PRIVATE_KEY = "0f1a37e33c9ed10dd2e133fe2ae9c459"; 
 
-$geetestdemo = new geetestdemo ( $PRIVATE_KEY );
-$validate_response = $geetestdemo->geetest_validate ( @$_POST ['geetest_challenge'], @$_POST ['geetest_validate'], @$_POST ['geetest_seccode'] );
+$geetest = new GeetestLib ( $PRIVATE_KEY );
+$validate_response = $geetest->geetest_validate ( @$_POST ['geetest_challenge'], @$_POST ['geetest_validate'], @$_POST ['geetest_seccode'] );
 if ($validate_response) {
 	echo 'Yes!';
 } else {

@@ -5,7 +5,7 @@
 
 // define("PRIVATE_KEY","0f1a37e33c9ed10dd2e133fe2ae9c459");
 
-class geetestdemo{
+class GeetestLib{
 	function __construct($PRIVATE_KEY){
 		$this->PRIVATE_KEY = $PRIVATE_KEY;
 	}
