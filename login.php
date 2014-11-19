@@ -31,7 +31,24 @@
 				<input type="password" id="passwd" name="passwd" value="gggggggg"/>
 			</div>
 			<div class="row">
-				<script type="text/javascript" src="http://api.geetest.com/get.php?gt=a40fd3b0d712165c5d13e6f747e948d4"></script>
+				<?php
+				 $opts = array(
+				    'http'=>array(
+				    'method'=>"GET",
+				    'timeout'=>3,
+				    )
+			    );
+			    $context = stream_context_create($opts);
+			    $content =file_get_contents('http://api.geetest.com/check_status.php', false, $context); 
+					if ($content == "ok") {
+						$ran = rand(1,100000);
+						echo '<script type="text/javascript" src="http://api.geetest.com/get.php?gt=a40fd3b0d712165c5d13e6f747e948d4&random='.$ran.'"></script>';
+					}else{
+						echo "use your own captcha HTML web code!";//这里输出网站原有验证码
+					}
+
+				 ?>
+				
 			</div>
 			<div class="row">
 				<input type="submit" value="登录" />
