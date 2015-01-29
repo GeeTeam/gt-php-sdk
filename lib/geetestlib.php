@@ -17,11 +17,24 @@ class geetestdemo{
 			$servervalidate = $this->_http_post($apiserver, '/validate.php', $query);			
 			if (strlen($servervalidate) > 0 && $servervalidate == md5($seccode)) {
 				return TRUE;
+			}else if($servervalidate == "false"){
+				return FALSE;
+			}else{ 
+				return $servervalidate;
 			}
 		}
 		
 		return FALSE;		
 	}
+	function challenge(){
+		$str = str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		$time = strval(time());
+		$rand = strval(rand(0,99999));
+		$test = $time.$str.$rand;
+		$challenge = md5($test);
+		return $challenge;
+	}
+
 
 	function _check_result_by_private($origin, $validate) {
 		return $validate == md5($this->PRIVATE_KEY.'geetest'.$origin) ? TRUE : FALSE;

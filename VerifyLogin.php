@@ -17,7 +17,7 @@ if (isset($_POST['geetest_challenge']) && isset($_POST['geetest_validate']) && i
 }
 
 
-if ($validate_response) {
+if ($validate_response == TRUE) {
 		echo 'Yes!';
 	} else {
 		echo 'No';
