@@ -8,9 +8,9 @@ GtWeb Php Demo
 
 1. lib/geetestlib.php
 	极验的PHP SDK库
-#. VerifyLogin.php
+2. VerifyLogin.php
 	调用Sdk的示例Servlet
-#. login.php
+3. login.php
 	使用验证码的前端示范页面  
 
 发布日志（由新到旧）
@@ -19,8 +19,8 @@ GtWeb Php Demo
 15.1.28.1
 -----------------------------------------
 1. SDK加入了自主生成id的接口
-#. 前端src引用有了加强版
-#. SDK的版本编号规则发生变化
+2. 前端src引用有了加强版
+3. SDK的版本编号规则发生变化
 
 14.8.28
 -----------------------------------------
