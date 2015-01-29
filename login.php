@@ -32,25 +32,14 @@
 			</div>
 			<div class="row">
 				<?php
-				 $opts = array(
-				    'http'=>array(
-				    'method'=>"GET",
-				    'timeout'=>3,
-				    )
-			    );
 				require_once("./lib/geetestlib.php");
 				$geetestlib = new geetestdemo();
-				$api = "http://api.geetest.com";
-				$url = $api."/register.php?gt=a40fd3b0d712165c5d13e6f747e948d4&challenge=".$geetestlib->challenge();
-				$content_challenge = file_get_contents($url); 
-			    $context = stream_context_create($opts);
-			    $content = file_get_contents($api.'/check_status.php', false, $context); 
-					if ($content == "ok" && $content_challenge == "OK") {
-						$ran = rand(1,100000);
-						echo '<script type="text/javascript" src="http://api.geetest.com/get.php?gt=a40fd3b0d712165c5d13e6f747e948d4&random='.$ran.'"></script>';
-					}else{
-						echo "use your own captcha HTML web code!";//这里输出网站原有验证码
-					}
+				if ($geetestlib->failback() == "ok" && $geetestlib->challenge() == "ok") {
+					$ran = rand(1,100000);
+					echo '<script type="text/javascript" src="http://api.geetest.com/get.php?gt=a40fd3b0d712165c5d13e6f747e948d4&random='.$ran.'"></script>';
+				}else{
+					echo "use your own captcha HTML web code!";//这里输出网站原有验证码
+				}
 
 				 ?>
 				

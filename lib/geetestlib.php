@@ -8,6 +8,7 @@
 class geetestdemo{
 	function __construct($PRIVATE_KEY){
 		$this->PRIVATE_KEY = $PRIVATE_KEY;
+		$this->api = "http://api.geetest.com";
 	}
 
 	function geetest_validate($challenge, $validate, $seccode) {	
@@ -32,8 +33,24 @@ class geetestdemo{
 		$rand = strval(rand(0,99999));
 		$test = $time.$str.$rand;
 		$challenge = md5($test);
-		return $challenge;
+		$url = $this->api."/register.php?gt=a40fd3b0d712165c5d13e6f747e948d4&challenge=".$challenge;
+		$content_challenge = file_get_contents($url); 
+		return $content_challenge;
 	}
+
+	function failback(){
+		$opts = array(
+		    'http'=>array(
+		    'method'=>"GET",
+		    'timeout'=>3,
+		    )
+	    );
+	    $context = stream_context_create($opts);
+	    $content = file_get_contents($this->api.'/check_status.php', false, $context); 
+	    return $content;
+	}
+
+
 
 
 	function _check_result_by_private($origin, $validate) {
