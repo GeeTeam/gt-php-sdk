@@ -6,8 +6,9 @@
 // define("PRIVATE_KEY","0f1a37e33c9ed10dd2e133fe2ae9c459");
 
 class geetestdemo{
-	function __construct($PRIVATE_KEY){
+	function __construct($PRIVATE_KEY,$CAPTCHA_KEY){
 		$this->PRIVATE_KEY = $PRIVATE_KEY;
+		$this->CAPTCHA_KEY = $CAPTCHA_KEY;
 		$this->api = "http://api.geetest.com";
 	}
 
@@ -33,7 +34,7 @@ class geetestdemo{
 		$rand = strval(rand(0,99999));
 		$test = $time.$str.$rand;
 		$challenge = md5($test);
-		$url = $this->api."/register.php?gt=a40fd3b0d712165c5d13e6f747e948d4&challenge=".$challenge;
+		$url = $this->api."/register.php?gt=".$this->CAPTCHA_KEY."&challenge=".$challenge;
 		$content_challenge = file_get_contents($url); 
 		return $content_challenge;
 	}

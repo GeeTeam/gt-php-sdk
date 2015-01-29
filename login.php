@@ -34,9 +34,10 @@
 				<?php
 				require_once("./lib/geetestlib.php");
 				$geetestlib = new geetestdemo();
+				$captcha_key = "a40fd3b0d712165c5d13e6f747e948d4";
 				if ($geetestlib->failback() == "ok" && $geetestlib->challenge() == "ok") {
 					$ran = rand(1,100000);
-					echo '<script type="text/javascript" src="http://api.geetest.com/get.php?gt=a40fd3b0d712165c5d13e6f747e948d4&random='.$ran.'"></script>';
+					echo '<script type="text/javascript" src="http://api.geetest.com/get.php?gt='.$captcha_key.'&random='.$ran.'"></script>';
 				}else{
 					echo "use your own captcha HTML web code!";//这里输出网站原有验证码
 				}
