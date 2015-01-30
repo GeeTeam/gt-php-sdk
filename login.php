@@ -33,15 +33,14 @@
 			<div class="row">
 				<?php
 				require_once("./lib/geetestlib.php");
-				$geetestlib = new geetestdemo();
-				$captcha_key = "a40fd3b0d712165c5d13e6f747e948d4";
-				if ($geetestlib->failback() == "ok" && $geetestlib->challenge() == "ok") {
-					$ran = rand(1,100000);
-					echo '<script type="text/javascript" src="http://api.geetest.com/get.php?gt='.$captcha_key.'&random='.$ran.'"></script>';
+				$captcha_key = "6055c3b4b35860d554ad91b823f927b5";
+				$geetestlib = new geetestdemo($private_key,$captcha_key);
+				if ($geetestlib->failback() == 1) {
+					echo $geetestlib->geetest_api();
 				}else{
+
 					echo "use your own captcha HTML web code!";//这里输出网站原有验证码
 				}
-
 				 ?>
 				
 			</div>

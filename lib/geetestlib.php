@@ -10,6 +10,11 @@ class geetestdemo{
 		$this->PRIVATE_KEY = $PRIVATE_KEY;
 		$this->CAPTCHA_KEY = $CAPTCHA_KEY;
 		$this->api = "http://api.geetest.com";
+		$str = str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		$time = strval(time());
+		$rand = strval(rand(0,99999));
+		$test = $time.$str.$rand;
+		$this->challenge = md5($test);
 	}
 
 	function geetest_validate($challenge, $validate, $seccode) {	
@@ -26,20 +31,11 @@ class geetestdemo{
 			}
 		}
 		
-		return FALSE;		
+		return FALSE;
 	}
-	function challenge(){
-		$str = str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-		$time = strval(time());
-		$rand = strval(rand(0,99999));
-		$test = $time.$str.$rand;
-		$challenge = md5($test);
-		$url = $this->api."/register.php?gt=".$this->CAPTCHA_KEY."&challenge=".$challenge;
-		$content_challenge = file_get_contents($url); 
-		return $content_challenge;
-	}
-
 	function failback(){
+		$url = $this->api."/register.php?gt=".$this->CAPTCHA_KEY."&challenge=".$this->challenge;
+		$content_challenge = file_get_contents($url); 
 		$opts = array(
 		    'http'=>array(
 		    'method'=>"GET",
@@ -48,11 +44,16 @@ class geetestdemo{
 	    );
 	    $context = stream_context_create($opts);
 	    $content = file_get_contents($this->api.'/check_status.php', false, $context); 
-	    return $content;
+		if ($content_challenge == "ok" && $content == "ok") {
+			return 1;
+		}else{
+			return 0;
+		}
 	}
 
-
-
+	function geetest_api(){
+		return "<script type='text/javascript' src='http://api.geetest.com/get.php?gt=".$this->CAPTCHA_KEY."&challenge=".$this->challenge."'></script>";
+	}
 
 	function _check_result_by_private($origin, $validate) {
 		return $validate == md5($this->PRIVATE_KEY.'geetest'.$origin) ? TRUE : FALSE;
