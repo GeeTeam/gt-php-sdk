@@ -35,7 +35,7 @@
 				require_once("./lib/geetestlib.php");
 				$captcha_key = "a40fd3b0d712165c5d13e6f747e948d4";
 				$product = "embed";//float 、embed 、popup
-				$geetestlib = new geetestdemo($captcha_key);
+				$geetestlib = new geetestdemo($captcha_key,'');
 				if ($geetestlib->process() == 1) {
 					echo $geetestlib->geetest_api($product);
 				}else{

@@ -38,6 +38,7 @@ class geetestdemo{
 		    )
 	    );
 	    $context = stream_context_create($opts);
+	    return $context;
 	}
 	
 	function register_challenge(){
