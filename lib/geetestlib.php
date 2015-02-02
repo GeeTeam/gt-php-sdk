@@ -29,10 +29,21 @@ class geetestdemo{
 		
 		return FALSE;
 	}
+
+	function get_context(){
+		$opts = array(
+		    'http'=>array(
+		    'method'=>"GET",
+		    'timeout'=>2,
+		    )
+	    );
+	    $context = stream_context_create($opts);
+	}
 	
 	function register_challenge(){
 		$url = $this->api."/register.php?gt=".$this->CAPTCHA_KEY;
-		$this->challenge = file_get_contents($url); 
+		$context = $this->get_context();
+		$this->challenge = file_get_contents($url,false,$context); 
 
 		if (strlen($this->challenge) != 32) {
 			return 0;
@@ -42,24 +53,15 @@ class geetestdemo{
 	}
 
 	function failback(){
-		$opts = array(
-		    'http'=>array(
-		    'method'=>"GET",
-		    'timeout'=>3,
-		    )
-	    );
-	    $context = stream_context_create($opts);
+		$context = $this->get_context();
 	    $content = file_get_contents($this->api.'/check_status.php', false, $context); 
 		if ($content != "ok"){
 			return 0;
 		}
 		return 1;	
 	}
-	
+
 	function process(){
-	    if ($this->failback() != 1) {
-	    	return 0;
-	    }
 	    if ($this->register_challenge() != 1) {
 	    	return 0;
 	    }
