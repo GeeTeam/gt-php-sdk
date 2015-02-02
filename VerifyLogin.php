@@ -4,9 +4,9 @@
  * 本文件示例只是简单的输出 Yes or No
  */
 require_once('lib/geetestlib.php');
-$private_key = "d8e6e5299189cf9be0f2c26f387ffbb4";
-$captcha_key = "6055c3b4b35860d554ad91b823f927b5";
-$geetestdemo = new geetestdemo($private_key,$captcha_key);
+$captcha_key = "a40fd3b0d712165c5d13e6f747e948d4";
+$private_key = "0f1a37e33c9ed10dd2e133fe2ae9c459";
+$geetestdemo = new geetestdemo($captcha_key,$private_key);
 if (isset($_POST['geetest_challenge']) && isset($_POST['geetest_validate']) && isset($_POST['geetest_seccode'])) {
 	
 	$validate_response = $geetestdemo->geetest_validate(@$_POST['geetest_challenge'], @$_POST['geetest_validate'], @$_POST['geetest_seccode']);
@@ -19,10 +19,12 @@ if (isset($_POST['geetest_challenge']) && isset($_POST['geetest_validate']) && i
 
 
 if ($validate_response == TRUE) {
-		echo 'Yes!';
-	} else {
-		echo 'No';
-	}
+	echo 'Yes!';
+} else if ($validate_response == FALSE) {
+	echo 'No';
+}else{
+	echo 'FORBIDDEN';
+}
 
 
 

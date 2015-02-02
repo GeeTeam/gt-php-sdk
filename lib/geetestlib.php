@@ -6,15 +6,11 @@
 // define("PRIVATE_KEY","0f1a37e33c9ed10dd2e133fe2ae9c459");
 
 class geetestdemo{
-	function __construct($PRIVATE_KEY,$CAPTCHA_KEY){
-		$this->PRIVATE_KEY = $PRIVATE_KEY;
+	function __construct($CAPTCHA_KEY,$PRIVATE_KEY){
 		$this->CAPTCHA_KEY = $CAPTCHA_KEY;
+		$this->PRIVATE_KEY = $PRIVATE_KEY;
 		$this->api = "http://api.geetest.com";
-		$str = str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-		$time = strval(time());
-		$rand = strval(rand(0,99999));
-		$test = $time.$str.$rand;
-		$this->challenge = md5($test);
+		$this->challenge = "";
 	}
 
 	function geetest_validate($challenge, $validate, $seccode) {	
@@ -33,9 +29,19 @@ class geetestdemo{
 		
 		return FALSE;
 	}
+	
+	function register_challenge(){
+		$url = $this->api."/register.php?gt=".$this->CAPTCHA_KEY;
+		$this->challenge = file_get_contents($url); 
+
+		if (strlen($this->challenge) != 32) {
+			return 0;
+		}
+		return 1;
+
+	}
+
 	function failback(){
-		$url = $this->api."/register.php?gt=".$this->CAPTCHA_KEY."&challenge=".$this->challenge;
-		$content_challenge = file_get_contents($url); 
 		$opts = array(
 		    'http'=>array(
 		    'method'=>"GET",
@@ -44,15 +50,24 @@ class geetestdemo{
 	    );
 	    $context = stream_context_create($opts);
 	    $content = file_get_contents($this->api.'/check_status.php', false, $context); 
-		if ($content_challenge == "ok" && $content == "ok") {
-			return 1;
-		}else{
+		if ($content != "ok"){
 			return 0;
 		}
+		return 1;	
+	}
+	
+	function process(){
+	    if ($this->failback() != 1) {
+	    	return 0;
+	    }
+	    if ($this->register_challenge() != 1) {
+	    	return 0;
+	    }
+	    return 1;
 	}
 
-	function geetest_api(){
-		return "<script type='text/javascript' src='http://api.geetest.com/get.php?gt=".$this->CAPTCHA_KEY."&challenge=".$this->challenge."'></script>";
+	function geetest_api($product){
+		return "<script type='text/javascript' src='http://api.geetest.com/get.php?gt=".$this->CAPTCHA_KEY."&challenge=".$this->challenge."&product=".$product."'></script>";
 	}
 
 	function _check_result_by_private($origin, $validate) {
