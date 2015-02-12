@@ -69,8 +69,8 @@ class geetestdemo{
 	    return 1;
 	}
 
-	function geetest_api($product){
-		return "<script type='text/javascript' src='http://api.geetest.com/get.php?gt=".$this->CAPTCHA_KEY."&challenge=".$this->challenge."&product=".$product."'></script>";
+	function geetest_api($product, $pic){
+		return "<script type='text/javascript' src='http://api.geetest.com/get.php?gt=".$this->CAPTCHA_KEY."&challenge=".$this->challenge."&product=".$product."&pic=".$pic."'></script>";
 	}
 
 	function _check_result_by_private($origin, $validate) {

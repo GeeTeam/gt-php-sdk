@@ -62,9 +62,10 @@
 					require_once("./lib/geetestlib.php");
 					$captcha_key = "a40fd3b0d712165c5d13e6f747e948d4";
 					$product = "embed";//float 、embed 、popup
+					$pic = 1; // for special users, $pic can be a number between 0 and 150
 					$geetestlib = new geetestdemo($captcha_key,'');
 					if ($geetestlib->process() == 1) {
-						echo $geetestlib->geetest_api($product);
+						echo $geetestlib->geetest_api($product, $pic);
 					}else{
 
 						echo "use your own captcha HTML web code!";//这里输出网站原有验证码
