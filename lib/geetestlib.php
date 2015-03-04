@@ -5,7 +5,7 @@
 
 // define("PRIVATE_KEY","0f1a37e33c9ed10dd2e133fe2ae9c459");
 
-class DeetestLib{
+class GeetestLib{
 	function __construct($CAPTCHA_ID,$PRIVATE_KEY){
 		$this->CAPTCHA_ID = $CAPTCHA_ID;
 		$this->PRIVATE_KEY = $PRIVATE_KEY;
