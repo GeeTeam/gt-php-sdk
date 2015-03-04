@@ -5,9 +5,9 @@
 
 // define("PRIVATE_KEY","0f1a37e33c9ed10dd2e133fe2ae9c459");
 
-class geetestdemo{
-	function __construct($CAPTCHA_KEY,$PRIVATE_KEY){
-		$this->CAPTCHA_KEY = $CAPTCHA_KEY;
+class DeetestLib{
+	function __construct($CAPTCHA_ID,$PRIVATE_KEY){
+		$this->CAPTCHA_ID = $CAPTCHA_ID;
 		$this->PRIVATE_KEY = $PRIVATE_KEY;
 		$this->api = "http://api.geetest.com";
 		$this->challenge = "";
@@ -42,7 +42,7 @@ class geetestdemo{
 	}
 	
 	function register_challenge(){
-		$url = $this->api."/register.php?gt=".$this->CAPTCHA_KEY;
+		$url = $this->api."/register.php?gt=".$this->CAPTCHA_ID;
 		$context = $this->get_context();
 		$this->challenge = file_get_contents($url,false,$context); 
 
@@ -70,7 +70,7 @@ class geetestdemo{
 	}
 
 	function geetest_api($product, $pic){
-		return "<script type='text/javascript' src='http://api.geetest.com/get.php?gt=".$this->CAPTCHA_KEY."&challenge=".$this->challenge."&product=".$product."&pic=".$pic."'></script>";
+		return "<script type='text/javascript' src='http://api.geetest.com/get.php?gt=".$this->CAPTCHA_ID."&challenge=".$this->challenge."&product=".$product."&pic=".$pic."'></script>";
 	}
 
 	function _check_result_by_private($origin, $validate) {
