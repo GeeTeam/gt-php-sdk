@@ -61,19 +61,18 @@
 				<?php
 					require_once("./lib/geetestlib.php");
 					$captcha_id = "a40fd3b0d712165c5d13e6f747e948d4";
-					$product = "embed";//float 、embed 、popup
-					$pic = 1; // for special users, $pic can be a number between 0 and 150
+					$product = "float";//float 、embed 、popup
 					$geetestlib = new GeetestLib($captcha_id,'');
+					$geetestlib->popupbtnid ='submit_button';
 					if ($geetestlib->process() == 1) {
-						echo $geetestlib->geetest_api($product, $pic);
+						echo $geetestlib->geetest_api($product);
 					}else{
-
 						echo "use your own captcha HTML web code!";//这里输出网站原有验证码
 					}
 				 ?>
 				</div>
 				<div class="box">
-					<button>提交</button>
+					<button id="submit_button">提交</button>
 				</div>
 			</form>
 		</div>

@@ -11,6 +11,7 @@ class GeetestLib{
 		$this->PRIVATE_KEY = $PRIVATE_KEY;
 		$this->api = "http://api.geetest.com";
 		$this->challenge = "";
+		$this->popupbtnid = "";
 	}
 
 	function geetest_validate($challenge, $validate, $seccode) {	
@@ -42,7 +43,7 @@ class GeetestLib{
 	}
 	
 	function register_challenge(){
-		$url = $this->api."/register.php?gt=".$this->CAPTCHA_ID;
+		$url = $this->api."/register.php?gt=".$this->CAPTCHA_ID."&product=".$product."&popupbtnid=".$this->popupbtnid;
 		$context = $this->get_context();
 		$this->challenge = file_get_contents($url,false,$context); 
 
@@ -69,8 +70,8 @@ class GeetestLib{
 	    return 1;
 	}
 
-	function geetest_api($product, $pic){
-		return "<script type='text/javascript' src='http://api.geetest.com/get.php?gt=".$this->CAPTCHA_ID."&challenge=".$this->challenge."&product=".$product."&pic=".$pic."'></script>";
+	function geetest_api($product){
+		return "<script type='text/javascript' src='http://api.geetest.com/get.php?gt=".$this->CAPTCHA_ID."&challenge=".$this->challenge."&product=".$product."'></script>";
 	}
 
 	function _check_result_by_private($origin, $validate) {
