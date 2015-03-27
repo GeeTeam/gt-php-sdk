@@ -3,119 +3,92 @@
  * 极验行为式验证安全平台，php 网站主后台包含的库文件
  */
 
-// define("PRIVATE_KEY","0f1a37e33c9ed10dd2e133fe2ae9c459");
+define('GT_API_SERVER', 'http://api.geetest.com');
+define('GT_SDK_VERSION', 'php_2.0');
 
 class GeetestLib{
-	function __construct($CAPTCHA_ID,$PRIVATE_KEY){
-		$this->CAPTCHA_ID = $CAPTCHA_ID;
-		$this->PRIVATE_KEY = $PRIVATE_KEY;
-		$this->api = "http://api.geetest.com";
+	function __construct() {
 		$this->challenge = "";
-		$this->popupbtnid = "";
 	}
 
-	function geetest_validate($challenge, $validate, $seccode) {	
-		$apiserver = 'api.geetest.com';
-		if (strlen($validate) > 0 && $this->_check_result_by_private($challenge, $validate)) {		
-			$query = 'seccode='.$seccode;
-			$servervalidate = $this->_http_post($apiserver, '/validate.php', $query);			
-			if (strlen($servervalidate) > 0 && $servervalidate == md5($seccode)) {
-				return TRUE;
-			}else if($servervalidate == "false"){
-				return FALSE;
-			}else{ 
-				return $servervalidate;
-			}
-		}
-		
-		return FALSE;
+	function set_captchaid($captcha_id) {
+		$this->captcha_id = $captcha_id;
 	}
 
-	function get_context(){
-		$opts = array(
-		    'http'=>array(
-		    'method'=>"GET",
-		    'timeout'=>2,
-		    )
-	    );
-	    $context = stream_context_create($opts);
-	    return $context;
+	function set_privatekey($private_key) {
+		$this->private_key = $private_key;
 	}
 	
-	function register_challenge(){
-		$url = $this->api."/register.php?gt=".$this->CAPTCHA_ID;
-		$context = $this->get_context();
-		$this->challenge = file_get_contents($url,false,$context); 
-
+	function register() {
+		$this->challenge = $this->_send_request("/register.php", array("gt"=>$this->captcha_id));
 		if (strlen($this->challenge) != 32) {
 			return 0;
 		}
 		return 1;
-
 	}
-
-	function failback(){
-		$context = $this->get_context();
-	    $content = file_get_contents($this->api.'/check_status.php', false, $context); 
-		if ($content != "ok"){
-			return 0;
-		}
-		return 1;	
-	}
-
-	function process(){
-	    if ($this->register_challenge() != 1) {
-	    	return 0;
-	    }
-	    return 1;
-	}
-
-	function geetest_api($product){
+	
+	function get_widget($product, $popupbtnid="") {
+		$params = array(
+			"gt" => $this->captcha_id,
+			"challenge" => $this->challenge,
+			"product" => $product,
+			"sdk" => GT_SDK_VERSION,
+		);
 		if ($product == "popup") {
-			return "<script type='text/javascript' src='http://api.geetest.com/get.php?gt=".$this->CAPTCHA_ID."&challenge=".$this->challenge."&product=".$product."&popupbtnid=".$this->popupbtnid."'></script>";
-		}else{
-			return "<script type='text/javascript' src='http://api.geetest.com/get.php?gt=".$this->CAPTCHA_ID."&challenge=".$this->challenge."&product=".$product."'></script>";
-
+			$params["popupbtnid"] = $popupbtnid;
 		}
+		return "<script type='text/javascript' src='".GT_API_SERVER."/get.php?".http_build_query($params)."'></script>";
 	}
 
-	function _check_result_by_private($origin, $validate) {
-		return $validate == md5($this->PRIVATE_KEY.'geetest'.$origin) ? TRUE : FALSE;
-	}
-
-	function _http_post($host, $path, $data, $port = 80) {
-		// $data = _fix_encoding($data);
-		
-		$http_request  = "POST $path HTTP/1.0\r\n";
-		$http_request .= "Host: $host\r\n";
-		$http_request .= "Content-Type: application/x-www-form-urlencoded\r\n";
-		$http_request .= "Content-Length: " . strlen($data) . "\r\n";
-		$http_request .= "\r\n";
-		$http_request .= $data;
-
-		$response = '';
-		if (($fs = @fsockopen($host, $port, $errno, $errstr, 10)) == false) {
-			die ('Could not open socket! ' . $errstr);
+	function validate($challenge, $validate, $seccode) {	
+		if ( ! $this->_check_validate($challenge, $validate)) {
+			return FALSE;
 		}
 		
-		fwrite($fs, $http_request);
-
-		while (!feof($fs))
-			$response .= fgets($fs, 1160);
-		fclose($fs);
-		
-		$response = explode("\r\n\r\n", $response, 2);
-		return $response[1];
+		$codevalidate = $this->_send_request("/validate.php", array("seccode"=>$seccode), "POST");
+		if (strlen($codevalidate)>0 && $codevalidate==md5($seccode)) {
+			return TRUE;
+		} else if ($codevalidate == "false"){
+			return FALSE;
+		} else { 
+			return $codevalidate;
+		}
+	}
+	
+	function _check_validate($challenge, $validate) {
+		if (strlen($validate) != 32) {
+			return FALSE;
+		}
+		if (md5($this->private_key.'geetest'.$challenge) != $validate) {
+			return FALSE;
+		} 
+		return TRUE;
 	}
 
-	function _fix_encoding($str) { 	
-		$curr_encoding = mb_detect_encoding($str) ; 
-		
-		if($curr_encoding == "UTF-8" && mb_check_encoding($str,"UTF-8")) {
-			return $str; 
+	function _send_request($path, $data, $method="GET") {
+		$data['sdk'] = GT_SDK_VERSION;
+
+		if ($method=="GET") {
+			$opts = array(
+			    'http'=>array(
+				    'method'=>"GET",
+				    'timeout'=>2,
+			    )
+		    );
+		    $context = stream_context_create($opts);
+			$response = file_get_contents(GT_API_SERVER.$path."?".http_build_query($data), false, $context);
+
 		} else {
-			return utf8_encode($str); 
+			$opts = array(
+				'http' => array(
+					'method' => "POST",
+					'content' => http_build_query($data),
+				)
+			);
+			$context = stream_context_create($opts);
+			$response = file_get_contents(GT_API_SERVER.$path, false, $context);
 		}
+		return $response;
 	}
 }
 ?>

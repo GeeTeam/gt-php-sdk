@@ -60,13 +60,11 @@
 				<div class="box">
 				<?php
 					require_once("./lib/geetestlib.php");
-					$captcha_id = "a40fd3b0d712165c5d13e6f747e948d4";
-					$product = "float";//float 、embed 、popup
-					$geetestlib = new GeetestLib($captcha_id,'');
-					$geetestlib->popupbtnid ='submit_button';
-					if ($geetestlib->process() == 1) {
-						echo $geetestlib->geetest_api($product);
-					}else{
+					$geetest = new GeetestLib();
+					$geetest->set_captchaid("a40fd3b0d712165c5d13e6f747e948d4");
+					if ($geetest->register()) {
+						echo $geetest->get_widget("embed");
+					} else {
 						echo "use your own captcha HTML web code!";//这里输出网站原有验证码
 					}
 				 ?>
