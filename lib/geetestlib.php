@@ -4,7 +4,9 @@
  */
 
 define('GT_API_SERVER', 'http://api.geetest.com');
-define('GT_SDK_VERSION', 'php_2.0');
+define('GT_SSL_SERVER', 'https://api.geetest.com');
+
+define('GT_SDK_VERSION', 'php_2.15.4.1.1');
 
 class GeetestLib{
 	function __construct() {
@@ -27,17 +29,17 @@ class GeetestLib{
 		return 1;
 	}
 	
-	function get_widget($product, $popupbtnid="") {
+	function get_widget($product, $popupbtnid="", $ssl=FALSE) {
 		$params = array(
 			"gt" => $this->captcha_id,
 			"challenge" => $this->challenge,
 			"product" => $product,
-			"sdk" => GT_SDK_VERSION,
 		);
 		if ($product == "popup") {
 			$params["popupbtnid"] = $popupbtnid;
 		}
-		return "<script type='text/javascript' src='".GT_API_SERVER."/get.php?".http_build_query($params)."'></script>";
+		$server = $ssl ? GT_SSL_SERVER : GT_API_SERVER;
+		return "<script type='text/javascript' src='".$server."/get.php?".http_build_query($params)."'></script>";
 	}
 
 	function validate($challenge, $validate, $seccode) {	
@@ -45,7 +47,7 @@ class GeetestLib{
 			return FALSE;
 		}
 		
-		$codevalidate = $this->_send_request("/validate.php", array("seccode"=>$seccode), "POST");
+		$codevalidate = $this->_send_request("/validate.php", array("seccode"=>$seccode,"sdk"=>GT_SDK_VERSION,), "POST");
 		if (strlen($codevalidate)>0 && $codevalidate==md5($seccode)) {
 			return TRUE;
 		} else if ($codevalidate == "false"){
@@ -66,8 +68,6 @@ class GeetestLib{
 	}
 
 	function _send_request($path, $data, $method="GET") {
-		$data['sdk'] = GT_SDK_VERSION;
-
 		if ($method=="GET") {
 			$opts = array(
 			    'http'=>array(
@@ -82,6 +82,7 @@ class GeetestLib{
 			$opts = array(
 				'http' => array(
 					'method' => "POST",
+					'header'  => 'Content-type: application/x-www-form-urlencoded',
 					'content' => http_build_query($data),
 				)
 			);
