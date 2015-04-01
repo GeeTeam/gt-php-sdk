@@ -46,8 +46,8 @@ class GeetestLib{
 		if ( ! $this->_check_validate($challenge, $validate)) {
 			return FALSE;
 		}
-		
-		$codevalidate = $this->_send_request("/validate.php", array("seccode"=>$seccode,"sdk"=>GT_SDK_VERSION,), "POST");
+		$query = 'seccode='.$seccode;
+		$codevalidate = $this->_http_post('api.geetest.com', '/validate.php', $query);
 		if (strlen($codevalidate)>0 && $codevalidate==md5($seccode)) {
 			return TRUE;
 		} else if ($codevalidate == "false"){
@@ -78,18 +78,27 @@ class GeetestLib{
 		    $context = stream_context_create($opts);
 			$response = file_get_contents(GT_API_SERVER.$path."?".http_build_query($data), false, $context);
 
-		} else {
-			$opts = array(
-				'http' => array(
-					'method' => "POST",
-					'header'  => 'Content-type: application/x-www-form-urlencoded',
-					'content' => http_build_query($data),
-				)
-			);
-			$context = stream_context_create($opts);
-			$response = file_get_contents(GT_API_SERVER.$path, false, $context);
 		}
 		return $response;
+	}
+
+	function _http_post($host,$path,$data,$port = 80){
+		$http_request = "POST $path HTTP/1.0\r\n";
+		$http_request .= "Host: $host\r\n";
+		$http_request .= "Content-Type: application/x-www-form-urlencoded\r\n";
+		$http_request .= "Content-Length: " . strlen($data) . "\r\n";
+		$http_request .= "\r\n";
+		$http_request .= $data;
+		$response = '';
+		if (($fs = @fsockopen($host, $port, $errno, $errstr, 10)) == false) {
+			die ('Could not open socket! ' . $errstr);
+		}		
+		fwrite($fs, $http_request);
+		while (!feof($fs))
+			$response .= fgets($fs, 1160);
+		fclose($fs);		
+		$response = explode("\r\n\r\n", $response, 2);
+		return $response[1];
 	}
 }
 ?>

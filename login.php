@@ -63,7 +63,7 @@
 					$geetest = new GeetestLib();
 					$geetest->set_captchaid("a40fd3b0d712165c5d13e6f747e948d4");
 					if ($geetest->register()) {
-						echo $geetest->get_widget("embed");
+						echo $geetest->get_widget("float");//若采用弹出式，要添加第二个参数（提交按钮的id）
 					} else {
 						echo "use your own captcha HTML web code!";//这里输出网站原有验证码
 					}
