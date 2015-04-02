@@ -6,7 +6,7 @@
 define('GT_API_SERVER', 'http://api.geetest.com');
 define('GT_SSL_SERVER', 'https://api.geetest.com');
 
-define('GT_SDK_VERSION', 'php_2.15.4.1.1');
+define('GT_SDK_VERSION', 'php_2.15.4.2.2');
 
 class GeetestLib{
 	function __construct() {
