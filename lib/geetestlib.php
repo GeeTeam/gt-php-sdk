@@ -46,7 +46,7 @@ class GeetestLib{
 		if ( ! $this->_check_validate($challenge, $validate)) {
 			return FALSE;
 		}
-		$query = 'seccode='.$seccode;
+		$query = http_build_query(array("seccode"=>$seccode,"sdk"=>GT_SDK_VERSION));
 		$codevalidate = $this->_http_post('api.geetest.com', '/validate.php', $query);
 		if (strlen($codevalidate)>0 && $codevalidate==md5($seccode)) {
 			return TRUE;
