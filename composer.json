@@ -1,5 +1,5 @@
 {
-    "name": "GeeTeam/gt-php-sdk",
+    "name": "gee-team/gt-php-sdk",
     "description": "GtWeb Php Demo",
     "authors": [
         {
@@ -11,7 +11,7 @@
         "php": ">=5.0.0"
     },
     "autoload": {
-        "class": ["src/class.geetest.php"]
+        "classmap": ["src/class.geetest.php"]
     },
     "license": "MIT"
 }
