@@ -59,9 +59,9 @@
 				</div>
 				<div class="box">
 				<?php
-					require_once("./lib/geetestlib.php");
-					$geetest = new GeetestLib();
-					$geetest->set_captchaid("a40fd3b0d712165c5d13e6f747e948d4");
+					require_once("../src/class.geetest.php");
+					$geetest = new Geetest();
+					$geetest->set_captchaid("8c4c32de35aafad6921ce9ec40174965");
 					if ($geetest->register()) {
 						echo $geetest->get_widget("float");//若采用弹出式，要添加第二个参数（提交按钮的id）
 					} else {
