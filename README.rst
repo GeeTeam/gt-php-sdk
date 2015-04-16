@@ -3,6 +3,23 @@ gt-php-sdk
 
 GtWeb Php Demo!
 
+使用 Composer
+==========
+
+如果你的项目使用 composer 管理依赖, 可以通过以下方式使用 gt PHP Library.
+
+
+1. 在 `composer.json` 中添加 gt 依赖
+
+```
+{
+    "require":{
+       "gee-team/gt-php-sdk": "dev-master"
+    }
+}
+```
+2. 执行 `php composer.phar install` 或 `php composer.phar update`
+
 文件描述
 ==========
 
