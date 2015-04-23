@@ -1,0 +1,17 @@
+{
+    "name": "gee-team/gt-php-sdk",
+    "description": "GtWeb Php Demo",
+    "authors": [
+        {
+            "name": "tanxu1993",
+            "email": "tanxu1993@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.0.0"
+    },
+    "autoload": {
+        "classmap": ["src/class.geetest.php"]
+    },
+    "license": "MIT"
+}
