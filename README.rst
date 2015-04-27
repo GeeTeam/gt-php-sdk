@@ -4,7 +4,7 @@ gt-php-sdk
 GtWeb Php Demo!
 
 使用 Composer
-==========
+=============
 
 如果你的项目使用 composer 管理依赖, 可以通过以下方式使用 gt PHP Library.
 

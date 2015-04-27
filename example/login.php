@@ -61,7 +61,7 @@
 				<?php
 					require_once("../src/class.geetest.php");
 					$geetest = new Geetest();
-					$geetest->set_captchaid("8c4c32de35aafad6921ce9ec40174965");
+					$geetest->set_captchaid("849cc1d3c6b7db46b35fcf960eca6add");
 					if ($geetest->register()) {
 						echo $geetest->get_widget("float");//若采用弹出式，要添加第二个参数（提交按钮的id）
 					} else {

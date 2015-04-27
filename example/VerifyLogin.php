@@ -5,7 +5,7 @@
  */
 require_once("../src/class.geetest.php");
 $geetest = new Geetest();
-$geetest->set_privatekey("b5264c506c2252e113e9a09a5e48485c");
+$geetest->set_privatekey("4949e98d6e09f3f986559a89b5f94437");
 
 if (isset($_POST['geetest_challenge']) && isset($_POST['geetest_validate']) && isset($_POST['geetest_seccode'])) {
 	$result = $geetest->validate($_POST['geetest_challenge'], $_POST['geetest_validate'], $_POST['geetest_seccode']);
