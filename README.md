@@ -23,11 +23,11 @@ GtWeb Php Demo!
 文件描述
 ==========
 
-1. lib/geetestlib.php
+1. src/geetest.class.php
 	极验的PHP SDK库
-2. VerifyLogin.php
+2. example/VerifyLogin.php
 	调用Sdk的示例Servlet
-3. login.php
+3. example/login.php
 	使用验证码的前端示范页面  
 
 发布日志（由新到旧）
