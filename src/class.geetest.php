@@ -6,7 +6,7 @@
 class Geetest{
 
 	const GT_API_SERVER  = 'http://api.geetest.com';
-	const GT_SSL_SERVER  = 'http://api.geetest.com';
+	const GT_SSL_SERVER  = 'https://api.geetest.com';
 	const GT_SDK_VERSION  = 'php_2.15.4.2.2';
 
 	private $captcha_id;
