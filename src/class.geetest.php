@@ -42,7 +42,7 @@ class Geetest{
 		}
 		$data = array(
 			"seccode"=>$seccode,
-			"sdk"=>GT_SDK_VERSION,
+			"sdk"=>self::GT_API_SERVER,
 		);
 		$url = "http://api.geetest.com/validate.php";
 		$codevalidate = $this->_request($url, $data);
