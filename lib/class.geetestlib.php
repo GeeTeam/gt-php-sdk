@@ -2,39 +2,20 @@
 /**
  * 极验行为式验证安全平台，php 网站主后台包含的库文件
  */
-class Geetest{
+require_once dirname(dirname(__FILE__)) . '/config/config.php';
+class GeetestLib{
 	const GT_API_SERVER  = 'http://api.geetest.com';
 	const GT_SSL_SERVER  = 'https://api.geetest.com';
 	const GT_SDK_VERSION  = 'php_2.15.4.2.2';
-	private $captcha_id;
-	private $private_key;
 	public function __construct() {
 		$this->challenge = "";
 	}
-	public function set_captchaid($captcha_id) {
-		$this->captcha_id = $captcha_id;
-	}
-	public function set_privatekey($private_key) {
-		$this->private_key = $private_key;
-	}
 	public function register() {
-		$this->challenge = $this->send_request("/register.php", array("gt"=>$this->captcha_id));
+		$this->challenge = $this->send_request("/register.php", array("gt"=>CAPTCHA_ID));
 		if (strlen($this->challenge) != 32) {
 			return 0;
 		}
 		return 1;
-	}
-	public function get_widget($product, $popupbtnid = "", $ssl = FALSE) {
-		$params = array(
-			"gt" => $this->captcha_id,
-			"challenge" => $this->challenge,
-			"product" => $product,
-		);
-		if ($product == "popup") {
-			$params["popupbtnid"] = $popupbtnid;
-		}
-		$server = $ssl ? self::GT_SSL_SERVER : self::GT_API_SERVER;
-		return "<script type='text/javascript' src='". $server ."/get.php?". http_build_query($params) ."'></script>";
 	}
 	public function validate($challenge, $validate, $seccode) {
 		if ( ! $this->check_validate($challenge, $validate)) {
@@ -45,7 +26,7 @@ class Geetest{
 			"sdk"=>self::GT_SDK_VERSION,
 		);
 		$url = "http://api.geetest.com/validate.php";
-		$codevalidate = $this->_request($url, $data);
+		$codevalidate = $this->post_request($url, $data);
 		if (strlen($codevalidate) > 0 && $codevalidate == md5($seccode)) {
 			return TRUE;
 		} else if ($codevalidate == "false"){
@@ -58,7 +39,7 @@ class Geetest{
 		if (strlen($validate) != 32) {
 			return FALSE;
 		}
-		if (md5($this->private_key.'geetest'.$challenge) != $validate) {
+		if (md5(PRIVATE_KEY.'geetest'.$challenge) != $validate) {
 			return FALSE;
 		}
 		return TRUE;
@@ -76,7 +57,7 @@ class Geetest{
 			return $response;
 		}
 	}
-	    private function _request($url, $postdata = null){
+	    public function post_request($url, $postdata = null){
 	    	$data = http_build_query($postdata);
 	    	if(function_exists('curl_exec')){
 	    		$ch = curl_init();
