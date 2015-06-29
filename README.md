@@ -22,33 +22,34 @@ GtWeb Php Demo!
 
 文件描述
 ===============================================
-1. config/config.php
-            captchaid和privatekey配置文件
+1. config/
+    - ./config.php
+        - captchaid和privatekey配置文件
 2. lib/
-        ./class.geetestlib.php
-	极验的PHP SDK库,提供只带拼图行为验证的功能
-        ./class.geetestmsg.php
-             提供带短信功能打包的完整功能,继承于GeetestLib
+    - ./class.geetestlib.php
+        - 极验的PHP SDK库,提供只带拼图行为验证的功能
+    - ./class.geetestmsg.php
+        - 提供带短信功能打包的完整功能,继承于GeetestLib
 
 3. static/
-        ./login.html
-             行为验证的前端示范页面
-        ./msg_login.html
-             短信+行为验证的前端示范页面
+    - ./login.html
+        - 行为验证的前端示范页面
+    - ./msg_login.html
+        - 短信+行为验证的前端示范页面
 
 4. web/
-        ./StartCapthcaServlet.php
-             用户判断极验服务器是否Down机的示例Servlet,页面生成前置处理
-        ./VerifyLoginServlet.php
-             提交验证调用Sdk的示例Servlet
+    - ./StartCapthcaServlet.php
+        - 用户判断极验服务器是否Down机的示例Servlet,页面生成前置处理
+    - ./VerifyLoginServlet.php
+        - 提交验证调用Sdk的示例Servlet
 
 5. msg/
-        ./StartMsgCapthcaServlet.php
-             用户判断极验服务器是否Down机的示例Servlet,页面生成前置处理
-        ./VerifyGeetestServlet.php
-             获取短信前的一次验证逻辑控制
-        ./VerifyMsgServlet.php
-             提交短信验证示例Servlet
+    - ./StartMsgCapthcaServlet.php
+        - 用户判断极验服务器是否Down机的示例Servlet,页面生成前置处理
+    - ./VerifyGeetestServlet.php
+        - 获取短信前的一次验证逻辑控制
+    - ./VerifyMsgServlet.php
+        - 提交短信验证示例Servlet
 
 发布日志（由新到旧）
 ======================
