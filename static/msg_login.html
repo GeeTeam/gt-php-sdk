@@ -96,11 +96,6 @@
 
                                 gt_captcha_obj.appendTo("#div_id_embed");
 
-                                //Ajax request demo,if you use submit form ,then ignore it 
-                                // gt_captcha_obj.onSuccess(function() {
-                                //     geetest_ajax_results()
-                                // });
-
                             } else {
                                 //failback :use your own captcha template
                                 //Geetest Server is down,Please use your own captcha system in your web page
@@ -128,28 +123,6 @@
                 </div>
             </form>
             <script type="text/javascript">
-                // function geetest_refresh() {
-                //     console.log("you can use this api in your own js function")
-                //     gt_captcha_obj.refresh();
-                // }
-
-                // function geetest_ajax_results() {
-                //     value = gt_captcha_obj.getValidate();
-                //     // var phone = {"phone":$("#phone").val()}
-                //     value.phone = $("#phone").val()
-                //     result = JSON.stringify(value);
-                //     // console.log(value);
-                //     console.log(result);
-                //     // $.ajax({
-                //     //     url : "../web/VerifyLoginServlet.php",//todo:set the servelet of your own
-                //     //     type : "post",
-                //     //     // dataType : 'JSON',
-                //     //     data : "value="+value,
-                //     //     success : function(sdk_result) {
-                //     //         console.log(sdk_result);
-                //     //     }
-                //     // });
-                // }
                 $(function() {
                     $("#getmsg").click(function(){
                         value = gt_captcha_obj.getValidate();
@@ -163,6 +136,7 @@
                                 console.log(result);
                                 if(result==1){
                                     $(".reminder").html('短信验证发送成功');
+                                    $(".reminder").css('color',"#31C552");
                                 }else if(result==-6){
                                     $(".reminder").html('滑动验证未通过');
                                 }else{
