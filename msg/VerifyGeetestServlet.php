@@ -1,12 +1,14 @@
 <?php 
+/**
+ * Msg套件下的拼图一次验证
+ * @author Tanxu
+ * $result   1:验证成功; 
+ */
 require_once dirname(dirname(__FILE__)) . '/lib/class.geetestlib.php';
-// require_once dirname(dirname(__FILE__)) . '/lib/class.geetestmsg.php';
-// $msggeetestlib = new MsgGeetestLib();
+require_once dirname(dirname(__FILE__)) . '/lib/class.geetestmsg.php';
 session_start();
-$GtSdk = $_SESSION['gtsdk'];
-
+$GtMsgSdk = $_SESSION['gtmsgsdk'];
 $data = json_decode($_POST['value'],true);
-$url = "http://messageapi.geetest.com/send";
 if ($data['geetest_validate'] == md5(PRIVATE_KEY . 'geetest' . $data['geetest_challenge'])) {
     $codedata = array(
             "seccode" => $data['geetest_seccode'],
@@ -14,9 +16,9 @@ if ($data['geetest_validate'] == md5(PRIVATE_KEY . 'geetest' . $data['geetest_ch
             "phone" =>$data['phone'],
             "msg_id" => CAPTCHA_ID
         );
-    $result = $GtSdk->post_request($url,$codedata);
-    $res = json_decode($result,true);
-    echo $res['res'];
+    $action = "send";
+    $result = $GtMsgSdk->send_msg_request($action,$codedata);
+    echo $result;
 }else{
     echo "-11";
 }

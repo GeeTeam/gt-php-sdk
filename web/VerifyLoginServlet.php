@@ -1,6 +1,5 @@
 <?php 
 /**
- * 通过引用并调用 geetestlib 中的函数，进行服务器端验证，从而决定提交按钮后的行为
  * 本文件示例只是简单的输出 Yes or No
  */
 require_once dirname(dirname(__FILE__)) . '/lib/class.geetestlib.php';
@@ -15,6 +14,8 @@ if ($_SESSION['gtserver'] == 1) {
     } else {
         echo 'FORBIDDEN';
     }
+}else{
+    echo "use your own captcha result";
 }
 
 

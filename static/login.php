@@ -79,9 +79,9 @@
 								gt_captcha_obj.appendTo("#div_id_embed");
 
 								//Ajax request demo,if you use submit form ,then ignore it 
-								gt_captcha_obj.onSuccess(function() {
-									geetest_ajax_results()
-								});
+								// gt_captcha_obj.onSuccess(function() {
+								// 	geetest_ajax_results()
+								// });
 
 							} else {
 								//failback :use your own captcha template
@@ -100,10 +100,10 @@
 				</div>
 			</form>
 			<script type="text/javascript">
-				function geetest_refresh() {
-					console.log("you can use this api in your own js function")
-					gt_captcha_obj.refresh();
-				}
+				// function geetest_refresh() {
+				// 	console.log("you can use this api in your own js function")
+				// 	gt_captcha_obj.refresh();
+				// }
 
 				// function geetest_ajax_results() {
 				// 	value = JSON.stringify(gt_captcha_obj.getValidate());

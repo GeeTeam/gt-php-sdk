@@ -106,6 +106,7 @@
                                 //Geetest Server is down,Please use your own captcha system in your web page
                                 //or use the simple geetest failback solution
                                 $("#div_id_embed").html('failback:gt-server is down ,please use your own captcha front');
+                                $(".mes-box").hide();
                                 //document.write('gt-server is down ,please use your own captcha')
                             }
 
