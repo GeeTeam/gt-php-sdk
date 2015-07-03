@@ -18,9 +18,15 @@ if ($GtSdk->register()) {
     echo json_encode($result);
 }else{
     $_SESSION['gtserver'] = 0;
+    $rnd1 = md5(rand(0,100));
+    $rnd2 = md5(rand(0,100));
+    $challenge = $rnd1 . substr($rnd2,0,2);
     $result = array(
-            'success' => 0
+            'success' => 0,
+            'gt' => CAPTCHA_ID,
+            'challenge' => $challenge
         );
+    $_SESSION['challenge'] = $result['challenge'];
     echo json_encode($result);
 }
         

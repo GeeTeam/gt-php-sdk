@@ -62,34 +62,48 @@
 				<div class="box" id="div_id_embed">
 				<script type="text/javascript">
 					//get  geetest server status, use the failback solution
+					var  loadGeetest = function(config) {
+						//1. use geetest capthca
+						window.gt_captcha_obj = new window.Geetest({
+							gt : config.gt,
+							challenge : config.challenge,
+							product : 'embed',
+							offline: !config.success
+						});
+						gt_captcha_obj.appendTo("#div_id_embed");
+						//Ajax request demo,if you use submit form ,then ignore it 
+						// gt_captcha_obj.onSuccess(function() {
+						// 	geetest_ajax_results()
+						// });
+					}
 					$.ajax({
 						url : "../web/StartCapthcaServlet.php",
 						type : "get",
 						dataType : 'JSON',
 						success : function(result) {
 							console.log(result);
-							if (result.success) {
-								//1. use geetest capthca
-								window.gt_captcha_obj = new window.Geetest({
-									gt : result.gt,
-									challenge : result.challenge,
-									product : 'embed'
-								});
-
-								gt_captcha_obj.appendTo("#div_id_embed");
-
-							} else {
-								//failback :use your own captcha template
-								//Geetest Server is down,Please use your own captcha system	in your web page
-								//or use the simple geetest failback solution
-								$("#div_id_embed").html('failback:gt-server is down ,please use your own captcha front');
-								//document.write('gt-server is down ,please use your own captcha')
+							if (!window.Geetest) {
+							  var s = document.createElement('script');
+							  s.id = 'gt_lib';
+							  s.src = 'http://static.geetest.com/static/js/geetest.0.0.0.js';
+							  s.charset = 'UTF-8';
+							  s.type = 'text/javascript';
+							  document.getElementsByTagName('head')[0].appendChild(s);
+							  var loaded = false;
+							  s.onload = s.onreadystatechange = function () {
+							    if (!loaded && (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete')) {
+							      loaded = true;
+							      loadGeetest(result);
+							    }
+							  };
+							console.log('in failback situation');
+							  return;
 							}
-
+							loadGeetest(result)
 						}
 					})
 				</script>
-				</div>
+					</div>
 				<div class="box">
 					<button id="submit_button">提交</button>
 				</div>
