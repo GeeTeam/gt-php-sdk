@@ -88,6 +88,7 @@ class GeetestLib{
 		return $res;	
 	}
 
+
 	public function get_x_pos_from_str($x_str) {
 		if (strlen($x_str) != 5) {
 			return 0;
