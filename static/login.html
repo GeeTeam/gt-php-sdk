@@ -2,7 +2,6 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
-	<script src="http://api.geetest.com/get.php"></script>
 	<title>极验行为式验证 php 类网站安装测试页面</title>
 </head>
 <body>
@@ -59,49 +58,76 @@
 					<label>密码：</label>
 					<input type="password" name="password" value="geetest"/>
 				</div>
-				<div class="box" id="div_id_embed">
+				<div class="box" id="div_geetest_lib">
+				<div id="div_id_embed"></div>
 				<script type="text/javascript">
+				
+					var gtFailbackFrontInitial = function(result) {
+						var s = document.createElement('script');
+						s.id = 'gt_lib';
+						s.src = 'http://static.geetest.com/static/js/geetest.0.0.0.js';
+						s.charset = 'UTF-8';
+						s.type = 'text/javascript';
+						document.getElementsByTagName('head')[0].appendChild(s);
+						var loaded = false;
+						s.onload = s.onreadystatechange = function() {
+							if (!loaded && (!this.readyState|| this.readyState === 'loaded' || this.readyState === 'complete')) {
+								loadGeetest(result);
+								loaded = true;
+							}
+						};
+					}
 					//get  geetest server status, use the failback solution
-					var  loadGeetest = function(config) {
+
+
+					var loadGeetest = function(config) {
+
 						//1. use geetest capthca
 						window.gt_captcha_obj = new window.Geetest({
 							gt : config.gt,
 							challenge : config.challenge,
 							product : 'embed',
-							offline: !config.success
+							offline : !config.success
 						});
+
 						gt_captcha_obj.appendTo("#div_id_embed");
-						//Ajax request demo,if you use submit form ,then ignore it 
-						// gt_captcha_obj.onSuccess(function() {
-						// 	geetest_ajax_results()
-						// });
 					}
-					$.ajax({
-						url : "../web/StartCapthcaServlet.php",
-						type : "get",
-						dataType : 'JSON',
-						success : function(result) {
-							console.log(result);
-							if (!window.Geetest) {
-							  var s = document.createElement('script');
-							  s.id = 'gt_lib';
-							  s.src = 'http://static.geetest.com/static/js/geetest.0.0.0.js';
-							  s.charset = 'UTF-8';
-							  s.type = 'text/javascript';
-							  document.getElementsByTagName('head')[0].appendChild(s);
-							  var loaded = false;
-							  s.onload = s.onreadystatechange = function () {
-							    if (!loaded && (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete')) {
-							      loaded = true;
-							      loadGeetest(result);
-							    }
-							  };
-							console.log('in failback situation');
-							  return;
+
+					s = document.createElement('script');
+					s.src = 'http://api.geetest.com/get.php?callback=gtcallback';
+					$("#div_geetest_lib").append(s);
+					
+					var gtcallback =( function() {
+						var status = 0, result, apiFail;
+						return function(r) {
+							status += 1;
+							if (r) {
+								result = r;
+								setTimeout(function() {
+									if (!window.Geetest) {
+										apiFail = true;
+										gtFailbackFrontInitial(result)
+									}
+								}, 1000)
 							}
-							loadGeetest(result)
+							else if(apiFail) {
+								return
+							}
+							if (status == 2) {
+								loadGeetest(result);
+							}
 						}
-					})
+					})()
+					
+					$.ajax({
+								url : "../web/StartCapthcaServlet.php",
+								type : "get",
+								dataType : 'JSON',
+								success : function(result) {
+									console.log(result);
+									gtcallback(result)
+								}
+							})
 				</script>
 					</div>
 				<div class="box">

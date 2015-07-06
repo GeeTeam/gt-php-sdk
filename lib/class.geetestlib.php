@@ -1,15 +1,22 @@
 <?php
 /**
  * 极验行为式验证安全平台，php 网站主后台包含的库文件
+ *@author Tanxu
  */
 require_once dirname(dirname(__FILE__)) . '/config/config.php';
 class GeetestLib{
 	const GT_API_SERVER  = 'http://api.geetest.com';
 	const GT_SSL_SERVER  = 'https://api.geetest.com';
-	const GT_SDK_VERSION  = 'php_2.15.4.2.2';
+	const GT_SDK_VERSION  = 'php_2.15.7.6.1';
 	public function __construct() {
 		$this->challenge = "";
 	}
+
+	/**
+	 *判断极验服务器是否down机
+	 *
+	 * @return
+	 */
 	public function register() {
 		$this->challenge = $this->send_request("/register.php", array("gt"=>CAPTCHA_ID));
 		if (strlen($this->challenge) != 32) {
@@ -58,6 +65,13 @@ class GeetestLib{
 		}
 	}
 
+	/**
+	 *解码随机参数
+	 *
+	 * @param $challenge
+	 * @param $string
+	 * @return
+	 */
 	public function decode_response($challenge,$string) {
 		if (strlen($string) > 100) {
 			return 0;
@@ -89,6 +103,11 @@ class GeetestLib{
 	}
 
 
+	/**
+	 *
+	 * @param $x_str
+	 * @return
+	 */
 	public function get_x_pos_from_str($x_str) {
 		if (strlen($x_str) != 5) {
 			return 0;
@@ -101,11 +120,18 @@ class GeetestLib{
 		return $result;
 	}
 
+	/**
+	 *
+	 * @param full_bg_index
+	 * @param img_grp_index
+	 * @return
+	 */
 	public function get_failback_pic_ans($full_bg_index,$img_grp_index) {
 		$full_bg_name = substr(md5($full_bg_index),0,9);
 		$bg_name = substr(md5($img_grp_index),10,9);
 
 		$answer_decode = "";
+		// 通过两个字符串奇数和偶数位拼接产生答案位
 		for ($i=0; $i < 9; $i++) { 
 			if ($i % 2 == 0) {
 				$answer_decode = $answer_decode . $full_bg_name[$i];
@@ -118,6 +144,12 @@ class GeetestLib{
     		return $x_pos;
 	}
 
+	/**
+	 * 输入的两位的随机数字,解码出偏移量
+	 * 
+	 * @param challenge
+	 * @return
+	 */
 	public function decodeRandBase($challenge) {
 		$base = substr($challenge, 32, 2);
 		$tempArray = array();
