@@ -78,7 +78,7 @@ class GeetestLib{
 		}
 		$key = array();
 		$chongfu = array();
-		$shuzi = [1,2,5,10,50];
+		$shuzi = array("0"=>1,"1"=>2,"2"=>5,"3"=>10,"4"=>50);
 		$count = 0;
 		$res = 0;
 		$array_challenge = str_split($challenge);
