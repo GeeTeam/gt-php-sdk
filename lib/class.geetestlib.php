@@ -5,8 +5,6 @@
  */
 require_once dirname(dirname(__FILE__)) . '/config/config.php';
 class GeetestLib{
-	const GT_API_SERVER  = 'http://api.geetest.com';
-	const GT_SSL_SERVER  = 'https://api.geetest.com';
 	const GT_SDK_VERSION  = 'php_2.15.7.6.1';
 	public function __construct() {
 		$this->challenge = "";
@@ -18,7 +16,8 @@ class GeetestLib{
 	 * @return
 	 */
 	public function register() {
-		$this->challenge = $this->send_request("/register.php", array("gt"=>CAPTCHA_ID));
+		$url = "http://api.geetest.com/register.php?gt=" . CAPTCHA_ID;
+		$this->challenge = $this->send_request($url);
 		if (strlen($this->challenge) != 32) {
 			return 0;
 		}
@@ -51,18 +50,25 @@ class GeetestLib{
 		}
 		return TRUE;
 	}
-	private function send_request($path, $data, $method = "GET") {
-		if ($method == "GET") {
+
+	private function send_request($url){
+	    	if(function_exists('curl_exec')){
+			$ch = curl_init();
+			curl_setopt ($ch, CURLOPT_URL, $url);
+			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+			$data = curl_exec($ch);
+			curl_close($ch);
+		}else{
 			$opts = array(
 			    'http'=>array(
 				    'method'=>"GET",
 				    'timeout'=>2,
-			    )
-		    );
-		    $context = stream_context_create($opts);
-			$response = file_get_contents(self::GT_API_SERVER.$path."?". http_build_query($data), false, $context);
-			return $response;
+			    	)	
+			    );
+			$context = stream_context_create($opts);
+			$data = file_get_contents($url, false, $context);
 		}
+		return $data;
 	}
 
 	/**
@@ -181,7 +187,7 @@ class GeetestLib{
 	    		if($postdata){
 		    		$url = $url.'?'.$data;
 				$opts = array(
-					'http' => array (
+					'http' => array(
 			            		'method' => 'POST',
 			            		'header'=> "Content-type: application/x-www-form-urlencoded\r\n" . "Content-Length: " . strlen($data) . "\r\n",
 			            		'content' => $data

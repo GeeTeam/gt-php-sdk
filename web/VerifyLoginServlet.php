@@ -5,7 +5,7 @@
 error_reporting(0);
 require_once dirname(dirname(__FILE__)) . '/lib/class.geetestlib.php';
 session_start();
-$GtSdk = $_SESSION['gtsdk'];
+$GtSdk = new GeetestLib();
 if ($_SESSION['gtserver'] == 1) {
     $result = $GtSdk->validate($_POST['geetest_challenge'], $_POST['geetest_validate'], $_POST['geetest_seccode']);
     if ($result == TRUE) {
@@ -17,17 +17,20 @@ if ($_SESSION['gtserver'] == 1) {
     }
 }else{
     $validate = $_POST['geetest_validate'];
-    $value = explode("_",$validate);
-    $challenge = $_SESSION['challenge'];
-    $GtSdk = $_SESSION['gtsdk'];
-    $ans = $GtSdk->decode_response($challenge,$value['0']);
-    $bg_idx = $GtSdk->decode_response($challenge,$value['1']);
-    $grp_idx = $GtSdk->decode_response($challenge,$value['2']);
-    $x_pos = $GtSdk->get_failback_pic_ans($bg_idx ,$grp_idx);
-    if (abs($ans - $x_pos) < 4) {
-        echo "yes";
+    if ($validate) {
+        $value = explode("_",$validate);
+        $challenge = $_SESSION['challenge'];
+        $ans = $GtSdk->decode_response($challenge,$value['0']);
+        $bg_idx = $GtSdk->decode_response($challenge,$value['1']);
+        $grp_idx = $GtSdk->decode_response($challenge,$value['2']);
+        $x_pos = $GtSdk->get_failback_pic_ans($bg_idx ,$grp_idx);
+        if (abs($ans - $x_pos) < 4) {
+            echo "yes";
+        }else{
+            echo "no";
+        }
     }else{
-        echo "no";
+        echo "no";        
     }
 }
 

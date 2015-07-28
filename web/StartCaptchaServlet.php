@@ -7,7 +7,6 @@ error_reporting(0);
 require_once dirname(dirname(__FILE__)) . '/lib/class.geetestlib.php';
 $GtSdk = new GeetestLib();
 session_start();
-$_SESSION['gtsdk'] = $GtSdk;
 $return = $GtSdk->register();
 if ($return) {
     $_SESSION['gtserver'] = 1;

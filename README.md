@@ -38,13 +38,13 @@ GtWeb Php Demo!
         - 短信+行为验证的前端示范页面
 
 4. web/
-    - ./StartCapthcaServlet.php
+    - ./StartCaptchaServlet.php
         - 用户判断极验服务器是否Down机的示例Servlet,页面生成前置处理
     - ./VerifyLoginServlet.php
         - 提交验证调用Sdk的示例Servlet
 
 5. msg/
-    - ./StartMsgCapthcaServlet.php
+    - ./StartMsgCaptchaServlet.php
         - 用户判断极验服务器是否Down机的示例Servlet,页面生成前置处理
     - ./VerifyGeetestServlet.php
         - 获取短信前的一次验证逻辑控制
@@ -53,9 +53,15 @@ GtWeb Php Demo!
 
 发布日志（由新到旧）
 ======================
+
+15.7.28.1
+----------------------------------------------
+1. 将file_get_contents 改成curl
+
+
 15.7.21.1
 ------------------------------------------
-1. 在请求StartCapthcaServlet时加一个随机数
+1. 在请求StartCaptchaServlet时加一个随机数
 
 15.7.16.1
 -------------------------------------------------------------
