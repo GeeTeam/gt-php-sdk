@@ -78,7 +78,7 @@ class GeetestLib{
 	 * @param $string
 	 * @return
 	 */
-	public function decode_response($challenge,$string) {
+	private function decode_response($challenge,$string) {
 		if (strlen($string) > 100) {
 			return 0;
 		}
@@ -114,7 +114,7 @@ class GeetestLib{
 	 * @param $x_str
 	 * @return
 	 */
-	public function get_x_pos_from_str($x_str) {
+	private function get_x_pos_from_str($x_str) {
 		if (strlen($x_str) != 5) {
 			return 0;
 		}
@@ -132,7 +132,7 @@ class GeetestLib{
 	 * @param img_grp_index
 	 * @return
 	 */
-	public function get_failback_pic_ans($full_bg_index,$img_grp_index) {
+	private function get_failback_pic_ans($full_bg_index,$img_grp_index) {
 		$full_bg_name = substr(md5($full_bg_index),0,9);
 		$bg_name = substr(md5($img_grp_index),10,9);
 
@@ -156,7 +156,7 @@ class GeetestLib{
 	 * @param challenge
 	 * @return
 	 */
-	public function decodeRandBase($challenge) {
+	private function decodeRandBase($challenge) {
 		$base = substr($challenge, 32, 2);
 		$tempArray = array();
 		for ($i=0; $i < strlen($base); $i++) { 
@@ -166,6 +166,32 @@ class GeetestLib{
 		}
 		$decodeRes = $tempArray['0'] * 36 + $tempArray['1'];
 		return $decodeRes;
+	}
+
+	/**
+	 * 得到答案
+	 * 
+	 * @param validate
+	 * @return
+	 */
+	public function get_answer($validate) {
+		if ($validate) {
+			$value = explode("_",$validate);
+			$challenge = $_SESSION['challenge'];
+			$ans = $this->decode_response($challenge,$value['0']);
+			$bg_idx = $this->decode_response($challenge,$value['1']);
+			$grp_idx = $this->decode_response($challenge,$value['2']);
+			$x_pos = $this->get_failback_pic_ans($bg_idx ,$grp_idx);
+			$answer = abs($ans - $x_pos);
+			if ($answer < 4) {
+				return 1;
+			}else{
+				return 0;
+			}
+		}else{
+			return 0;
+		}
+
 	}
 
 	public function post_request($url, $postdata = null){
