@@ -3,7 +3,7 @@
 *  Geetest配置文件
 * @author Tanxu
 */
-define("CAPTCHA_ID", "4a0eb5e6f780944308954bc602814a53");
-define("PRIVATE_KEY", "03e0d35820a741d74445761c2b6d38c5");
+define("CAPTCHA_ID", "3386e03c620a4067f18fa92c370f1594");
+define("PRIVATE_KEY", "5fe89444b54d3a3b8e49594c42a770cf");
 
  ?>
