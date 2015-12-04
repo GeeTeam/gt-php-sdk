@@ -133,7 +133,7 @@
                             url:'../msg/VerifyGeetestServlet.php',
                             data:"value="+result,
                             success:function(result){
-                                console.log(result);
+                                // console.log(result);
                                 if(result==1){
                                     $(".reminder").html('短信验证发送成功');
                                     $(".reminder").css('color',"#31C552");
