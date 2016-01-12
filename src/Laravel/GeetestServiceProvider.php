@@ -2,7 +2,7 @@
 namespace GeeTeam\Geetest;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Validation\Validator;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * 极验行为式验证
