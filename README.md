@@ -50,6 +50,10 @@ GtWeb Php Demo!
         - 获取短信前的一次验证逻辑控制
     - ./VerifyMsgServlet.php
         - 提交短信验证示例Servlet
+6. src/
+	- ./Laravel/*
+		- Laravel 框架扩展包
+
 
 发布日志（由新到旧）
 ======================
