@@ -1,5 +1,5 @@
 <?php
-namespace GeeTeam\Geetest;
+namespace GeeTeam\Geetest\Laravel;
 
 require_once __DIR__ . '/../../lib/class.geetestlib.php';
 

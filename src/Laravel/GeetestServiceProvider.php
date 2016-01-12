@@ -1,5 +1,5 @@
 <?php
-namespace GeeTeam\Geetest;
+namespace GeeTeam\Geetest\Laravel;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;

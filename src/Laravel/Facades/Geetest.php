@@ -1,5 +1,5 @@
 <?php
-namespace GeeTeam\Geetest\Facades;
+namespace GeeTeam\Geetest\Laravel\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

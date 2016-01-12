@@ -1,5 +1,5 @@
 <?php
-namespace GeeTeam\Geetest;
+namespace GeeTeam\Geetest\Laravel;
 
 use Illuminate\Validation\Validator;
 use InvalidArgumentException;
