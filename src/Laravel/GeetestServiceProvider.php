@@ -33,11 +33,9 @@ class GeetestServiceProvider extends ServiceProvider
 	public function register()
 	{
 		$this->app->singleton('geetest', function ($app) {
-			require_once base_path('vendor/gee-team/gt-php-sdk/src/class.geetest.php');
 			$config = $app->config->get('geetest');
-			$geetest = new \Geetest();
-			$geetest->set_captchaid($config['captcha_id']);
-			$geetest->set_privatekey($config['private_key']);
+			$geetest = new Geetest();
+			$geetest->setConfig($config);
 			return $geetest;
 		});
 	}
