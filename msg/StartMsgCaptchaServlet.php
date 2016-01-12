@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * 使用Get的方式返回：challenge和capthca_id 此方式以实现前后端完全分离的开发模式 专门实现failback
  * @author Tanxu
@@ -13,7 +13,7 @@ if ($GtMsgSdk->register()) {
     $_SESSION['gtserver'] = 1;
     $result = array(
             'success' => 1,
-            'gt' => CAPTCHA_ID,
+            'gt' => $GtMsgSdk->captcha_id,
             'challenge' => $GtMsgSdk->challenge
         );
     echo json_encode($result);
@@ -24,6 +24,6 @@ if ($GtMsgSdk->register()) {
         );
     echo json_encode($result);
 }
-        
+
 
  ?>

@@ -10,10 +10,17 @@
     "require": {
         "php": ">=5.0.0"
     },
+    "require-dev": {
+		"illuminate/support": "5.*",
+		"illuminate/validation": "5.*"
+	},
     "autoload": {
         "classmap": [
             "lib"
-        ]
+        ],
+        "psr-4": {
+            "GeeTeam\\Geetest\\": "src/"
+        }
     },
     "license": "MIT"
 }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * 二次的短信验证
  * @author Tanxu
@@ -15,7 +15,7 @@ if ($_SESSION['gtserver'] == 1) {
     $phone = $_POST['phone'];
     $data = array(
             'phone' => $phone,
-            'msg_id' => CAPTCHA_ID,
+            'msg_id' => $GtMsgSdk->captcha_id,
             'code' => $code
         );
     $result = $GtMsgSdk->send_msg_request($action,$data);

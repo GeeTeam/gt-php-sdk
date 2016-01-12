@@ -3,10 +3,13 @@
  * 极验行为式验证安全平台，php 网站主后台包含的库文件
  *@author Tanxu
  */
-require_once dirname(dirname(__FILE__)) . '/config/config.php';
+// require_once dirname(dirname(__FILE__)) . '/config/config.php';
 class GeetestLib{
 	const GT_SDK_VERSION  = 'php_2.15.7.6.1';
 	public function __construct() {
+		$config = include __DIR__ . '/../config/config.php';
+		$this->captcha_id = $config['captcha_id'];
+		$this->private_key = $config['private_key'];
 		$this->challenge = "";
 	}
 
@@ -16,7 +19,7 @@ class GeetestLib{
 	 * @return
 	 */
 	public function register() {
-		$url = "http://api.geetest.com/register.php?gt=" . CAPTCHA_ID;
+		$url = "http://api.geetest.com/register.php?gt=" . $this->captcha_id;
 		$this->challenge = $this->send_request($url);
 		if (strlen($this->challenge) != 32) {
 			return 0;
@@ -45,7 +48,7 @@ class GeetestLib{
 		if (strlen($validate) != 32) {
 			return FALSE;
 		}
-		if (md5(PRIVATE_KEY.'geetest'.$challenge) != $validate) {
+		if (md5($this->private_key.'geetest'.$challenge) != $validate) {
 			return FALSE;
 		}
 		return TRUE;
@@ -63,7 +66,7 @@ class GeetestLib{
 			    'http'=>array(
 				    'method'=>"GET",
 				    'timeout'=>2,
-			    	)	
+			    	)
 			    );
 			$context = stream_context_create($opts);
 			$data = file_get_contents($url, false, $context);
@@ -89,7 +92,7 @@ class GeetestLib{
 		$res = 0;
 		$array_challenge = str_split($challenge);
 		$array_value = str_split($string);
-		for ($i=0; $i < strlen($challenge); $i++) { 
+		for ($i=0; $i < strlen($challenge); $i++) {
 			$item = $array_challenge[$i];
 			if (in_array($item, $chongfu)) {
 				continue;
@@ -101,11 +104,11 @@ class GeetestLib{
 			}
 		}
 
-		for ($j=0; $j < strlen($string); $j++) { 
+		for ($j=0; $j < strlen($string); $j++) {
 			$res += $key[$array_value[$j]];
 		}
 		$res = $res - $this->decodeRandBase($challenge);
-		return $res;	
+		return $res;
 	}
 
 
@@ -138,7 +141,7 @@ class GeetestLib{
 
 		$answer_decode = "";
 		// 通过两个字符串奇数和偶数位拼接产生答案位
-		for ($i=0; $i < 9; $i++) { 
+		for ($i=0; $i < 9; $i++) {
 			if ($i % 2 == 0) {
 				$answer_decode = $answer_decode . $full_bg_name[$i];
 			}elseif ($i % 2 == 1) {
@@ -152,14 +155,14 @@ class GeetestLib{
 
 	/**
 	 * 输入的两位的随机数字,解码出偏移量
-	 * 
+	 *
 	 * @param challenge
 	 * @return
 	 */
 	private function decodeRandBase($challenge) {
 		$base = substr($challenge, 32, 2);
 		$tempArray = array();
-		for ($i=0; $i < strlen($base); $i++) { 
+		for ($i=0; $i < strlen($base); $i++) {
 			$tempAscii = ord($base[$i]);
 			$result = ($tempAscii > 57) ? ($tempAscii - 87) : ($tempAscii -48);
 			array_push($tempArray,$result);
@@ -170,7 +173,7 @@ class GeetestLib{
 
 	/**
 	 * 得到答案
-	 * 
+	 *
 	 * @param validate
 	 * @return
 	 */
