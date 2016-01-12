@@ -11,7 +11,7 @@ require_once __DIR__ . '/../../lib/class.geetestlib.php';
 class Geetest extends \GeetestLib
 {
 
-	public function get_widget($product, $popupbtnid = "")
+	public function getWidget($product, $popupbtnid = '')
 	{
 		$params = array(
 			'gt' => $this->captcha_id,
