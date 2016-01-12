@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../lib/class.geetestlib.php';
  *
  * @author Latrell Chan
  */
-class Geetest extends GeetestLib
+class Geetest extends \GeetestLib
 {
 
 	public function get_widget($product, $popupbtnid = "")
