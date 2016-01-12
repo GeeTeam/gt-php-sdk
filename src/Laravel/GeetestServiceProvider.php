@@ -23,10 +23,8 @@ class GeetestServiceProvider extends ServiceProvider
 			__DIR__ . '/../../config/config.php' => config_path('geetest.php')
 		]);
 
-		// 注册自定义验证器扩展。
-		Validator::resolver(function ($translator, $data, $rules, $messages) {
-			return new GeetestValidator($translator, $data, $rules, $messages);
-		});
+		// 注册验证器扩展。
+		Validator::extend('geetest', 'GeetestValidator@validateGeetest');
 	}
 
 	/**
