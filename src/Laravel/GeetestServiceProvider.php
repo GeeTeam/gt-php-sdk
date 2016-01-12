@@ -19,6 +19,10 @@ class GeetestServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
+		$this->publishes([
+			__DIR__ . '/../../config/config.php' => config_path('geetest.php')
+		]);
+
 		// 注册自定义验证器扩展。
 		Validator::resolver(function ($translator, $data, $rules, $messages) {
 			return new GeetestValidator($translator, $data, $rules, $messages);
@@ -32,6 +36,8 @@ class GeetestServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
+		$this->mergeConfigFrom(__DIR__ . '/../../config/config.php', 'geetest');
+
 		$this->app->singleton('geetest', function ($app) {
 			$config = $app->config->get('geetest');
 			$geetest = new Geetest();
