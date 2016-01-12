@@ -7,10 +7,15 @@
 class GeetestLib{
 	const GT_SDK_VERSION  = 'php_2.15.7.6.1';
 	public function __construct() {
+		$this->challenge = "";
+
 		$config = include __DIR__ . '/../config/config.php';
+		$this->setConfig($config);
+	}
+
+	public function setConfig($config){
 		$this->captcha_id = $config['captcha_id'];
 		$this->private_key = $config['private_key'];
-		$this->challenge = "";
 	}
 
 	/**
