@@ -2,7 +2,6 @@
 namespace GeeTeam\Geetest\Laravel;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Validator;
 
 /**
  * 极验行为式验证
@@ -24,7 +23,7 @@ class GeetestServiceProvider extends ServiceProvider
 		]);
 
 		// 注册验证器扩展。
-		Validator::extend('geetest', 'GeetestValidator@validateGeetest');
+		require __DIR__ . '/validation.php';
 	}
 
 	/**
