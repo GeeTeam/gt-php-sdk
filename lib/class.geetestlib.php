@@ -3,11 +3,11 @@
  * 极验行为式验证安全平台，php 网站主后台包含的库文件
  *@author Tanxu
  */
-require_once dirname(dirname(__FILE__)) . '/config/config.php';
 class GeetestLib{
-	const GT_SDK_VERSION  = 'php_2.15.7.6.1';
-	public function __construct() {
-		$this->challenge = "";
+	const GT_SDK_VERSION  = 'php_3.0.0';
+	public function __construct($captcha_id, $private_key) {
+		$this->captcha_id = $captcha_id;
+		$this->private_key = $private_key;
 	}
 
 	/**
@@ -15,14 +15,38 @@ class GeetestLib{
 	 *
 	 * @return
 	 */
-	public function register() {
-		$url = "http://api.geetest.com/register.php?gt=" . CAPTCHA_ID;
-		$this->challenge = $this->send_request($url);
-		if (strlen($this->challenge) != 32) {
+	public function pre_process() {
+		$url = "http://api.geetest.com/register.php?gt=" . $this->captcha_id;
+		$challenge = $this->send_request($url);
+		if (strlen($challenge) != 32) {
+			$this->failback_process();
 			return 0;
 		}
+		$this->success_process($challenge);
 		return 1;
 	}
+
+	private function success_process($challenge){
+		$result = array(
+			    'success' => 1,
+            	'gt' => $this->captcha_id,
+            	'challenge' => $challenge
+            );
+		$this->response_str = json_encode($result);
+	}
+
+	private function failback_process(){
+		$rnd1 = md5(rand(0,100));
+    	$rnd2 = md5(rand(0,100));
+    	$challenge = $rnd1 . substr($rnd2,0,2);
+    	$result = array(
+            'success' => 0,
+            'gt' => $this->captcha_id,
+            'challenge' => $challenge
+        );
+        $this->response_str = json_encode($result);
+	}
+
 	public function validate($challenge, $validate, $seccode) {
 		if ( ! $this->check_validate($challenge, $validate)) {
 			return FALSE;
@@ -174,10 +198,9 @@ class GeetestLib{
 	 * @param validate
 	 * @return
 	 */
-	public function get_answer($validate) {
+	public function get_answer($challenge, $validate) {
 		if ($validate) {
 			$value = explode("_",$validate);
-			$challenge = $_SESSION['challenge'];
 			$ans = $this->decode_response($challenge,$value['0']);
 			$bg_idx = $this->decode_response($challenge,$value['1']);
 			$grp_idx = $this->decode_response($challenge,$value['2']);
