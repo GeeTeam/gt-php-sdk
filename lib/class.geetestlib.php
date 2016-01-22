@@ -69,7 +69,7 @@ class GeetestLib{
 		if (strlen($validate) != 32) {
 			return FALSE;
 		}
-		if (md5(PRIVATE_KEY.'geetest'.$challenge) != $validate) {
+		if (md5($this->private_key.'geetest'.$challenge) != $validate) {
 			return FALSE;
 		}
 		return TRUE;
