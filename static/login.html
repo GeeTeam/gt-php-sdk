@@ -49,7 +49,7 @@
 			极验行为式验证 php 类网站安装测试页面
 		</div>
 		<div class="content">
-			<form method="post" action="VerifyLoginServlet.php">
+			<form method="post" action="../web/VerifyLoginServlet.php">
 				<div class="box">
 					<label>邮箱：</label>
 					<input type="text" name="email" value="geetest@geetest.com"/>
@@ -68,7 +68,7 @@
 				     };
 				    $.ajax({
 				        // 获取id，challenge，success（是否启用failback）
-				        url: "StartCaptchaServlet.php?rand="+Math.round(Math.random()*100),
+				        url: "../web/StartCaptchaServlet.php?rand="+Math.round(Math.random()*100),
 				        type: "get",
 				        dataType: "json", // 使用jsonp格式
 				        success: function (data) {

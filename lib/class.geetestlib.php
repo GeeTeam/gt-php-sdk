@@ -4,7 +4,7 @@
  *@author Tanxu
  */
 class GeetestLib{
-	const GT_SDK_VERSION  = 'php_3.0.0';
+	const GT_SDK_VERSION  = 'php_3.1.0';
 	public function __construct($captcha_id, $private_key) {
 		$this->captcha_id = $captcha_id;
 		$this->private_key = $private_key;
@@ -27,6 +27,7 @@ class GeetestLib{
 	}
 
 	private function success_process($challenge){
+		$challenge = md5($challenge.$this->private_key);
 		$result = array(
 			    'success' => 1,
             	'gt' => $this->captcha_id,
