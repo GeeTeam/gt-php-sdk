@@ -4,7 +4,7 @@
  *@author Tanxu
  */
 class GeetestLib{
-	const GT_SDK_VERSION  = 'php_3.1.0';
+	const GT_SDK_VERSION  = 'php_3.1.1';
 	public function __construct($captcha_id, $private_key) {
 		$this->captcha_id = $captcha_id;
 		$this->private_key = $private_key;
@@ -48,9 +48,13 @@ class GeetestLib{
         $this->response_str = json_encode($result);
 	}
 
-	public function validate($challenge, $validate, $seccode) {
+	public function get_response_str(){
+		return $this->response_str;
+	}
+
+	public function sucess_validate($challenge, $validate, $seccode) {
 		if ( ! $this->check_validate($challenge, $validate)) {
-			return FALSE;
+			return 0;
 		}
 		$data = array(
 			"seccode"=>$seccode,
@@ -58,12 +62,12 @@ class GeetestLib{
 		);
 		$url = "http://api.geetest.com/validate.php";
 		$codevalidate = $this->post_request($url, $data);
-		if (strlen($codevalidate) > 0 && $codevalidate == md5($seccode)) {
-			return TRUE;
+		if ($codevalidate == md5($seccode)) {
+			return 1;
 		} else if ($codevalidate == "false"){
-			return FALSE;
+			return 0;
 		} else {
-			return $codevalidate;
+			return 0;
 		}
 	}
 	private function check_validate($challenge, $validate) {
@@ -199,7 +203,7 @@ class GeetestLib{
 	 * @param validate
 	 * @return
 	 */
-	public function get_answer($challenge, $validate) {
+	public function fail_validate($challenge, $validate, $seccode) {
 		if ($validate) {
 			$value = explode("_",$validate);
 			$ans = $this->decode_response($challenge,$value['0']);
@@ -235,7 +239,7 @@ class GeetestLib{
 	    		curl_close($ch);
 	    	}else{
 	    		if($postdata){
-		    		$url = $url.'?'.$data;
+		    		$url = $url;
 				$opts = array(
 					'http' => array(
 			            		'method' => 'POST',

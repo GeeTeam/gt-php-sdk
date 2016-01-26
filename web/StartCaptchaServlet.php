@@ -10,5 +10,5 @@ $GtSdk = new GeetestLib(CAPTCHA_ID, PRIVATE_KEY);
 session_start();
 $status = $GtSdk->pre_process();
 $_SESSION['gtserver'] = $status;
-echo $GtSdk->response_str;
+echo $GtSdk->get_response_str();
  ?>
