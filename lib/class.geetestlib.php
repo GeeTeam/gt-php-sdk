@@ -4,7 +4,7 @@
  *@author Tanxu
  */
 class GeetestLib{
-	const GT_SDK_VERSION  = 'php_3.1.1';
+	const GT_SDK_VERSION  = 'php_3.2.0';
 	public function __construct($captcha_id, $private_key) {
 		$this->captcha_id = $captcha_id;
 		$this->private_key = $private_key;
@@ -15,8 +15,11 @@ class GeetestLib{
 	 *
 	 * @return
 	 */
-	public function pre_process() {
+	public function pre_process($user_id=null) {
 		$url = "http://api.geetest.com/register.php?gt=" . $this->captcha_id;
+		if (($user_id != null) and (is_string($user_id))) {
+			$url = $url."&user_id=".$user_id;
+		}
 		$challenge = $this->send_request($url);
 		if (strlen($challenge) != 32) {
 			$this->failback_process();
@@ -52,7 +55,7 @@ class GeetestLib{
 		return $this->response_str;
 	}
 
-	public function sucess_validate($challenge, $validate, $seccode) {
+	public function sucess_validate($challenge, $validate, $seccode, $user_id=null) {
 		if ( ! $this->check_validate($challenge, $validate)) {
 			return 0;
 		}
@@ -60,6 +63,9 @@ class GeetestLib{
 			"seccode"=>$seccode,
 			"sdk"=>self::GT_SDK_VERSION,
 		);
+		if (($user_id != null) and (is_string($user_id))) {
+			$data["user_id"] = $user_id;
+		}
 		$url = "http://api.geetest.com/validate.php";
 		$codevalidate = $this->post_request($url, $data);
 		if ($codevalidate == md5($seccode)) {
