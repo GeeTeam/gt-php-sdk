@@ -54,7 +54,7 @@ Gt Php SDK
   $GtSdk = new GeetestLib(CAPTCHA_ID, PRIVATE_KEY);
   $user_id = $_SESSION['user_id'];
   if ($_SESSION['gtserver'] == 1) {
-      $result = $GtSdk->sucess_validate($_POST['geetest_challenge'], $_POST['geetest_validate'], $_POST['geetest_seccode'], $user_id);
+      $result = $GtSdk->success_validate($_POST['geetest_challenge'], $_POST['geetest_validate'], $_POST['geetest_seccode'], $user_id);
       if ($result) {
           echo 'Yes!';
       } else{
@@ -72,6 +72,10 @@ Gt Php SDK
 
 发布日志
 -----------------
++ 3.2.0
+
+ - 添加用户标识接口
+
 + 3.1.1
 
  - 统一接口

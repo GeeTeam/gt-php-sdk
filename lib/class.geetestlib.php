@@ -55,7 +55,7 @@ class GeetestLib{
 		return $this->response_str;
 	}
 
-	public function sucess_validate($challenge, $validate, $seccode, $user_id=null) {
+	public function success_validate($challenge, $validate, $seccode, $user_id=null) {
 		if ( ! $this->check_validate($challenge, $validate)) {
 			return 0;
 		}
