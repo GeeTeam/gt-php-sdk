@@ -8,8 +8,8 @@
 class GeetestLib {
     const GT_SDK_VERSION = 'php_3.2.0';
 
-    public static $connectTimeout = 0.2;
-    public static $socketTimeout  = 1;
+    public static $connectTimeoutMS = 10;//CURLOPT_CONNECTTIMEOUT_MS
+    public static $socketTimeoutMS  = 1000;//CURLOPT_TIMEOUT_MS
 
     private $response;
 
@@ -169,34 +169,31 @@ class GeetestLib {
      */
     private function send_request($url) {
 
-        $start_time = microtime(true);
-
         if (function_exists('curl_exec')) {
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$connectTimeout);
-            curl_setopt($ch, CURLOPT_TIMEOUT, self::$socketTimeout);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, self::$connectTimeoutMS);
+            curl_setopt($ch, CURLOPT_TIMEOUT_MS, self::$socketTimeoutMS);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
             $data = curl_exec($ch);
+
+            if (curl_errno($ch)) {
+                $err = sprintf("curl[%s] error[%s]", $url, curl_errno($ch) . ':' . curl_error($ch));
+                $this->triggerError($err);
+            }
+
             curl_close($ch);
         } else {
             $opts    = array(
                 'http' => array(
                     'method'  => "GET",
-                    'timeout' => self::$connectTimeout + self::$socketTimeout,
+                    'timeout' => ceil((self::$connectTimeoutMS + self::$socketTimeoutMS)/1000),
                 )
             );
             $context = stream_context_create($opts);
             $data    = file_get_contents($url, false, $context);
-        }
-
-        $spend_time = microtime(true) - $start_time;
-
-        if ($spend_time > (self::$socketTimeout + self::$connectTimeout)) {
-            $err = sprintf("request[%s] spends %s in method %s", $url, $spend_time, __METHOD__);
-            $this->triggerError($err);
         }
 
         return $data;
@@ -213,16 +210,14 @@ class GeetestLib {
             return false;
         }
 
-        $start_time = microtime(true);
-
         $data = http_build_query($postdata);
         if (function_exists('curl_exec')) {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$connectTimeout);
-            curl_setopt($ch, CURLOPT_TIMEOUT, self::$socketTimeout);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$connectTimeoutMS);
+            curl_setopt($ch, CURLOPT_TIMEOUT, self::$socketTimeoutMS);
 
             //不可能执行到的代码
             if (!$postdata) {
@@ -232,6 +227,12 @@ class GeetestLib {
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
             }
             $data = curl_exec($ch);
+
+            if (curl_errno($ch)) {
+                $err = sprintf("curl[%s] error[%s]", $url, curl_errno($ch) . ':' . curl_error($ch));
+                $this->triggerError($err);
+            }
+
             curl_close($ch);
         } else {
             if ($postdata) {
@@ -240,19 +241,12 @@ class GeetestLib {
                         'method'  => 'POST',
                         'header'  => "Content-type: application/x-www-form-urlencoded\r\n" . "Content-Length: " . strlen($data) . "\r\n",
                         'content' => $data,
-                        'timeout' => self::$connectTimeout + self::$socketTimeout
+                        'timeout' => ceil((self::$connectTimeoutMS + self::$socketTimeoutMS)/1000)
                     )
                 );
                 $context = stream_context_create($opts);
                 $data    = file_get_contents($url, false, $context);
             }
-        }
-
-        $spend_time = microtime(true) - $start_time;
-
-        if ($spend_time > (self::$socketTimeout + self::$connectTimeout)) {
-            $err = sprintf("request[%s] spends %s in method %s", $url, $spend_time, __METHOD__);
-            $this->triggerError($err);
         }
 
         return $data;
