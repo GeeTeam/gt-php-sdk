@@ -8,8 +8,8 @@
 class GeetestLib {
     const GT_SDK_VERSION = 'php_3.2.0';
 
-    public static $connectTimeoutMS = 10;//CURLOPT_CONNECTTIMEOUT_MS
-    public static $socketTimeoutMS  = 1000;//CURLOPT_TIMEOUT_MS
+    public static $connectTimeout = 1;
+    public static $socketTimeout  = 1;
 
     private $response;
 
@@ -173,8 +173,8 @@ class GeetestLib {
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, self::$connectTimeoutMS);
-            curl_setopt($ch, CURLOPT_TIMEOUT_MS, self::$socketTimeoutMS);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$connectTimeout);
+            curl_setopt($ch, CURLOPT_TIMEOUT, self::$socketTimeout);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
             $data = curl_exec($ch);
@@ -189,7 +189,7 @@ class GeetestLib {
             $opts    = array(
                 'http' => array(
                     'method'  => "GET",
-                    'timeout' => ceil((self::$connectTimeoutMS + self::$socketTimeoutMS)/1000),
+                    'timeout' => self::$connectTimeout + self::$socketTimeout,
                 )
             );
             $context = stream_context_create($opts);
@@ -215,9 +215,8 @@ class GeetestLib {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$connectTimeoutMS);
-            curl_setopt($ch, CURLOPT_TIMEOUT, self::$socketTimeoutMS);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$connectTimeout);
+            curl_setopt($ch, CURLOPT_TIMEOUT, self::$socketTimeout);
 
             //不可能执行到的代码
             if (!$postdata) {
@@ -241,7 +240,7 @@ class GeetestLib {
                         'method'  => 'POST',
                         'header'  => "Content-type: application/x-www-form-urlencoded\r\n" . "Content-Length: " . strlen($data) . "\r\n",
                         'content' => $data,
-                        'timeout' => ceil((self::$connectTimeoutMS + self::$socketTimeoutMS)/1000)
+                        'timeout' => self::$connectTimeout + self::$socketTimeout
                     )
                 );
                 $context = stream_context_create($opts);
