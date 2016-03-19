@@ -66,7 +66,7 @@ class GeetestLib {
             'gt'        => $this->captcha_id,
             'challenge' => $challenge
         );
-        $this->response = json_encode($result);
+        $this->response = $result;
     }
 
     /**
