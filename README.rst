@@ -6,69 +6,36 @@ Gt Php SDK
 开发环境
 ----------------
 
- - php5
+ - php5.2
 
 
-快速开始
+部署架构
 ---------------
+详见 `部署架构 <http://www.geetest.com/install/sections/idx-basic-introduction.html#id7>`__ 
+
+
+前端接口
+-------------------
+详见 `前端接口 <http://www.geetest.com/install/sections/idx-client-sdk.html#config-para>`__ 
+
+宕机回滚
+--------------
+详见 `宕机回滚 <http://www.geetest.com/install/sections/idx-basic-introduction.html#id8>`__ 
+
+
+文件说明
+---------------
+ - config/config.php 极验ID和KEY配置文件,请在 `极验后台 <http://account.geetest.com>`__ 申请,进行替换
+ - lib/class.geetestlib.php 极验库文件(请不要随意改动)
+ - static/login.php 前端展示页面,根据您的需求进行自定义
+ - web/StartCaptchaServlet.php 根据自己的私钥初始化验证
+ - web/VerifyLoginServlet.php 根据post参数进行二次验证
 
 
 
-1. 获取代码
-
-从 `Github <https://github.com/GeeTeam/gt-php-sdk/>`__ 上Clone代码:
-
-.. code-block:: bash
-
-    $ git clone https://github.com/GeeTeam/gt-php-sdk.git
-
-
-2. 代码示例
-
-根据自己的私钥出初始化验证
-
-.. code-block :: php
-
-  <?php 
-  require_once dirname(dirname(__FILE__)) . '/lib/class.geetestlib.php';
-  require_once dirname(dirname(__FILE__)) . '/config/config.php';
-  $GtSdk = new GeetestLib(CAPTCHA_ID, PRIVATE_KEY);
-  session_start();
-  $user_id = "test";
-  $status = $GtSdk->pre_process($user_id);
-  $_SESSION['gtserver'] = $status;
-  $_SESSION['user_id'] = $user_id;
-  echo $GtSdk->get_response_str();
-   ?>
-
-
-
-二次验证
-
-.. code-block :: php
-
-  <?php 
-  require_once dirname(dirname(__FILE__)) . '/lib/class.geetestlib.php';
-  require_once dirname(dirname(__FILE__)) . '/config/config.php';
-  session_start();
-  $GtSdk = new GeetestLib(CAPTCHA_ID, PRIVATE_KEY);
-  $user_id = $_SESSION['user_id'];
-  if ($_SESSION['gtserver'] == 1) {
-      $result = $GtSdk->success_validate($_POST['geetest_challenge'], $_POST['geetest_validate'], $_POST['geetest_seccode'], $user_id);
-      if ($result) {
-          echo 'Yes!';
-      } else{
-          echo 'No';
-      }
-  }else{
-      if ($GtSdk->fail_validate($_POST['geetest_challenge'],$_POST['geetest_validate'],$_POST['geetest_seccode'])) {
-          echo "yes";
-      }else{
-          echo "no";
-      }
-  }
-  ?>
-
+常见问题
+--------------
+1. 3.1.0之前的老版本SDK,不兼容现在的id和key
 
 发布日志
 -----------------

@@ -1,6 +1,6 @@
 <?php 
 /**
- * 本文件示例只是简单的输出 Yes or No
+ * 输出二次验证结果,本文件示例只是简单的输出 Yes or No
  */
 // error_reporting(0);
 require_once dirname(dirname(__FILE__)) . '/lib/class.geetestlib.php';
