@@ -205,7 +205,7 @@ class GeetestLib {
      * @param array $postdata
      * @return mixed|string
      */
-    private function post_request($url, $postdata = []) {
+    private function post_request($url, $postdata = '') {
         if (!$postdata) {
             return false;
         }
