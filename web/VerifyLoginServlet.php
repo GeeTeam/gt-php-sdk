@@ -6,20 +6,25 @@
 require_once dirname(dirname(__FILE__)) . '/lib/class.geetestlib.php';
 require_once dirname(dirname(__FILE__)) . '/config/config.php';
 session_start();
-$GtSdk = new GeetestLib(CAPTCHA_ID, PRIVATE_KEY);
+if($_POST['type'] == 'pc'){
+    $GtSdk = new GeetestLib(CAPTCHA_ID, PRIVATE_KEY);
+}elseif ($_POST['type'] == 'mobile') {
+    $GtSdk = new GeetestLib(MOBILE_CAPTCHA_ID, MOBILE_PRIVATE_KEY);
+}
+
 $user_id = $_SESSION['user_id'];
-if ($_SESSION['gtserver'] == 1) {
+if ($_SESSION['gtserver'] == 1) {   //服务器正常
     $result = $GtSdk->success_validate($_POST['geetest_challenge'], $_POST['geetest_validate'], $_POST['geetest_seccode'], $user_id);
     if ($result) {
-        echo 'Yes!';
+        echo '{"status":"success"}';
     } else{
-        echo 'No';
+        echo '{"status":"fail"}';
     }
-}else{
+}else{  //服务器宕机,走failback模式
     if ($GtSdk->fail_validate($_POST['geetest_challenge'],$_POST['geetest_validate'],$_POST['geetest_seccode'])) {
-        echo "yes";
+        echo '{"status":"success"}';
     }else{
-        echo "no";
+        echo '{"status":"fail"}';
     }
 }
 ?>

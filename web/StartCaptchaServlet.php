@@ -6,7 +6,11 @@
 //error_reporting(0);
 require_once dirname(dirname(__FILE__)) . '/lib/class.geetestlib.php';
 require_once dirname(dirname(__FILE__)) . '/config/config.php';
-$GtSdk = new GeetestLib(CAPTCHA_ID, PRIVATE_KEY);
+if($_GET['type'] == 'pc'){
+	$GtSdk = new GeetestLib(CAPTCHA_ID, PRIVATE_KEY);
+}elseif ($_GET['type'] == 'mobile') {
+	$GtSdk = new GeetestLib(MOBILE_CAPTCHA_ID, MOBILE_PRIVATE_KEY);
+}
 session_start();
 $user_id = "test";
 $status = $GtSdk->pre_process($user_id);
