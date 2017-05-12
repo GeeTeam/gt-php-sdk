@@ -30,6 +30,7 @@ Gt Php SDK
  - static/login.php 前端展示页面,根据您的需求进行自定义
  - web/StartCaptchaServlet.php 根据自己的私钥初始化验证
  - web/VerifyLoginServlet.php 根据post参数进行二次验证
+ - static/gt.js 静态js文件，之前是直接引用http://static.geetest.com/static/tools/gt.js的
 
 
 
